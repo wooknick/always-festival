@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.js": "/always-festival/static/js/main.9d753478.chunk.js",
+    "main.js.map": "/always-festival/static/js/main.9d753478.chunk.js.map",
+    "runtime-main.js": "/always-festival/static/js/runtime-main.58563d44.js",
+    "runtime-main.js.map": "/always-festival/static/js/runtime-main.58563d44.js.map",
+    "static/css/2.e6808bd0.chunk.css": "/always-festival/static/css/2.e6808bd0.chunk.css",
+    "static/js/2.e65af01f.chunk.js": "/always-festival/static/js/2.e65af01f.chunk.js",
+    "static/js/2.e65af01f.chunk.js.map": "/always-festival/static/js/2.e65af01f.chunk.js.map",
+    "index.html": "/always-festival/index.html",
+    "precache-manifest.8988e99d988a0b3958a3c71a5ef2687f.js": "/always-festival/precache-manifest.8988e99d988a0b3958a3c71a5ef2687f.js",
+    "service-worker.js": "/always-festival/service-worker.js",
+    "static/css/2.e6808bd0.chunk.css.map": "/always-festival/static/css/2.e6808bd0.chunk.css.map",
+    "static/js/2.e65af01f.chunk.js.LICENSE.txt": "/always-festival/static/js/2.e65af01f.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.58563d44.js",
+    "static/css/2.e6808bd0.chunk.css",
+    "static/js/2.e65af01f.chunk.js",
+    "static/js/main.9d753478.chunk.js"
+  ]
+}
