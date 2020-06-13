@@ -83,9 +83,11 @@ const Banner = styled.div`
 
 const marquee = keyframes`
   from{
+    -webkit-transform: translate(100%, 0);
     transform: translate(100%, 0);
   }
   to{
+    -webkit-transform: translate(100%, 0);
     transform: translate(-100%, 0);
   }
   `;
