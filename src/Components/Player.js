@@ -4,12 +4,6 @@ import YouTube from "@u-wave/react-youtube";
 
 const STAGE_NAME = ["STAGE A", "STAGE B", "STAGE C"];
 
-const BANNER_TEXT_DUMMY = [
-  "The color palettes in Coolors are user-contributed. Navigating the color palettes is fast and easy: Simply press the Spacebar on your keyboard and you’ll be shown a new set of colors. When you find colors you like, click on them to lock them in place. Once you’re happy with your color scheme, you can bookmark the URL to save it for a later time.",
-  "Note that if anything has a device prop passed in it will take precedence over the one from context.",
-  "You can use the onChange callback to specify a change handler that will be called when the media query's value changes.",
-];
-
 const hoverFrames = keyframes`
 0%{
   background-color: white;
@@ -92,6 +86,7 @@ const marquee = keyframes`
   `;
 
 const BannerText = styled.div`
+  min-width: 100%;
   width: max-content;
   white-space: nowrap;
   height: 50px;
@@ -124,29 +119,62 @@ const Button = styled.div`
   }
 `;
 
-const makeYoutube = (video_id) => {
-  return `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${video_id}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-  // return `<iframe id="ytplayer" type="text/html" width="100%" height="100%"
-  // src="https://www.youtube.com/embed/${video_id}?autoplay=1"
-  // frameborder="0"></iframe>`;
-};
-
 const Player = ({ stageNo, fullpageApi, data, play }) => {
   const [textIndex, setTextIndex] = useState(0);
+  const [pause, setPause] = useState(false);
   const videoRef = useRef();
   const onStageData = data[Math.floor(new Date().getHours() / 2)];
 
   useEffect(() => {
     setInterval(() => {
-      setTextIndex((v) => (v + 1) % BANNER_TEXT_DUMMY.length);
+      setTextIndex((v) => (v + 1) % onStageData.comments.length);
     }, 20000);
-  }, []);
+  }, [onStageData]);
 
   useEffect(() => {
     if (play) {
-      videoRef.current.playerInstance.playVideo();
+      if (pause) {
+        videoRef.current.playerInstance.pauseVideo();
+      } else {
+        videoRef.current.playerInstance.playVideo();
+      }
     }
-  }, [play]);
+  }, [pause, play]);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      const section = fullpageApi.getActiveSection()?.index;
+      const slide = fullpageApi.getActiveSlide()?.index;
+
+      if (section === 1) {
+        if (play) {
+          if (event.code === "ArrowRight") {
+            const now = videoRef.current.playerInstance.getCurrentTime();
+            videoRef.current.playerInstance.seekTo(now + 10);
+          } else if (event.code === "ArrowLeft") {
+            const now = videoRef.current.playerInstance.getCurrentTime();
+            videoRef.current.playerInstance.seekTo(now - 10);
+          } else if (event.code === "ArrowUp") {
+            const now = videoRef.current.playerInstance.getVolume();
+            videoRef.current.playerInstance.setVolume(now + 5);
+          } else if (event.code === "ArrowDown") {
+            const now = videoRef.current.playerInstance.getVolume();
+            videoRef.current.playerInstance.setVolume(now - 5);
+          }
+        }
+        if (event.code === "Space") {
+          setPause((v) => !v);
+        } else if (event.code === "KeyH") {
+          setPause(true);
+        }
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [fullpageApi, play]);
 
   const goToStage = (stageIdx) => {
     return () => {
@@ -172,7 +200,7 @@ const Player = ({ stageNo, fullpageApi, data, play }) => {
           width="100%"
           height="100%"
           video={onStageData.video_id}
-          disableKeyboard={false}
+          disableKeyboard={true}
           annotations={false}
           showRelatedVideos={false}
           showInfo={false}

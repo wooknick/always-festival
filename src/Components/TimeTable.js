@@ -161,7 +161,6 @@ const TimeTable = ({ screen, state, fullpageApi }) => {
     const handleKeyDown = (event) => {
       const section = fullpageApi.getActiveSection()?.index;
       const slide = fullpageApi.getActiveSlide()?.index;
-      console.log(event.code);
       if (event.code === "Digit1" && slide !== 0) {
         fullpageApi.moveTo(2, 0);
       } else if (event.code === "Digit2" && slide !== 1) {
@@ -172,6 +171,7 @@ const TimeTable = ({ screen, state, fullpageApi }) => {
         fullpageApi.moveTo(1);
       } else if (event.code === "Space" && section !== 1) {
         fullpageApi.moveTo(2, 1);
+        event.stopImmediatePropagation();
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -196,7 +196,7 @@ const TimeTable = ({ screen, state, fullpageApi }) => {
         <Info>
           <InfoText>Enjoy the Festival of Legends!</InfoText>
           <InfoText>Every 2 hours, New Stage Come.</InfoText>
-          <InfoText>Keyboard Shortcut : 1, 2, 3, H, Space</InfoText>
+          <InfoText>Keyboard Shortcut : 1, 2, 3, H, Space, Arrow</InfoText>
         </Info>
       </Title>
       <Content>
