@@ -1,13 +1,17 @@
 import React from "react";
 import GlobalStyles from "../Styles/GlobalStyles";
 import Home from "./Home";
+import Theme from "../Styles/Theme";
+import { ThemeProvider } from "styled-components";
 
 const App = () => {
   return (
-    <>
-      <GlobalStyles />
-      <Home />
-    </>
+    <ThemeProvider theme={Theme}>
+      <>
+        <GlobalStyles />
+        <Home />
+      </>
+    </ThemeProvider>
   );
 };
 

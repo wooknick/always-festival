@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
+import { stageA, stageB, stageC } from "../data";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -89,7 +90,7 @@ const Stage = styled.div`
   grid-template-rows: repeat(14, 1fr);
   row-gap: 4px;
   div:nth-of-type(${(props) => Math.floor(props.hour / 2) + 1}) {
-    background-color: #7268a6;
+    background-color: ${(props) => props.theme.color.point};
     color: white;
     font-weight: bold;
     border-top: 2px solid black;
@@ -107,25 +108,27 @@ const StageTitle = styled.header`
   text-transform: uppercase;
   font-weight: bold;
   font-size: 23px;
-  color: #195c77;
+  color: ${(props) => props.theme.color.title};
 `;
 
 const StageCell = styled.div`
   width: 100%;
   height: 100%;
-  background-color: ${(props) => props.bgColor};
+  background-color: ${(props) =>
+    props.theme.color.stage[props.stageId].background};
   display: flex;
   justify-content: center;
   align-items: center;
   user-select: none;
+  text-align: center;
 `;
 
-const bounce = keyframes`
+const hoverFrames = keyframes`
 0%{
   background-color: white;
 }
 100%{
-  background-color: #6b3074;
+  background-color: ${(props) => props.theme.color.hover};
   color: white;
 }
 `;
@@ -143,16 +146,46 @@ const StageArrow = styled.div`
     cursor: pointer;
     background-color: #6b3074;
     color: white;
-    animation: ${bounce} 0.2s linear;
+    animation: ${hoverFrames} 0.2s linear;
   }
 `;
 
-const TimeTable = ({ screen, fullpageApi }) => {
+const TimeTable = ({ screen, state, fullpageApi }) => {
   const [hour, setHour] = useState(0);
 
   useEffect(() => {
     setHour(new Date().getHours());
   }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      const section = fullpageApi.getActiveSection()?.index;
+      const slide = fullpageApi.getActiveSlide()?.index;
+      console.log(event.code);
+      if (event.code === "Digit1" && slide !== 0) {
+        fullpageApi.moveTo(2, 0);
+      } else if (event.code === "Digit2" && slide !== 1) {
+        fullpageApi.moveTo(2, 1);
+      } else if (event.code === "Digit3" && slide !== 2) {
+        fullpageApi.moveTo(2, 2);
+      } else if (event.code === "KeyH" && section !== 0) {
+        fullpageApi.moveTo(1);
+      } else if (event.code === "Space" && section !== 1) {
+        fullpageApi.moveTo(2, 1);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [fullpageApi, state]);
+
+  const goToStage = (stageIdx) => {
+    return () => {
+      fullpageApi.moveTo(2, stageIdx);
+    };
+  };
 
   return screen === "mobile" ? (
     <Wrapper>Not Support Mobile Yet</Wrapper>
@@ -163,7 +196,7 @@ const TimeTable = ({ screen, fullpageApi }) => {
         <Info>
           <InfoText>Enjoy the Festival of Legends!</InfoText>
           <InfoText>Every 2 hours, New Stage Come.</InfoText>
-          <InfoText>You can use "Arrow Key" in Keyboard.</InfoText>
+          <InfoText>Keyboard Shortcut : 1, 2, 3, H, Space</InfoText>
         </Info>
       </Title>
       <Content>
@@ -184,69 +217,30 @@ const TimeTable = ({ screen, fullpageApi }) => {
         </Time>
         <Stage hour={hour}>
           <StageTitle>Stage A</StageTitle>
-          <StageCell bgColor="#D8E0BB">Lady Gaga</StageCell>
-          <StageCell bgColor="#D8E0BB">Jimmy Buffett</StageCell>
-          <StageCell bgColor="#D8E0BB">The Weeknd</StageCell>
-          <StageCell bgColor="#D8E0BB">Drake</StageCell>
-          <StageCell bgColor="#D8E0BB">Luke Combs</StageCell>
-          <StageCell bgColor="#D8E0BB">Post Malone</StageCell>
-          <StageCell bgColor="#D8E0BB">DaBaby</StageCell>
-          <StageCell bgColor="#D8E0BB">Lil Baby</StageCell>
-          <StageCell bgColor="#D8E0BB">Roddy Ricch</StageCell>
-          <StageCell bgColor="#D8E0BB">Run The hJewels</StageCell>
-          <StageCell bgColor="#D8E0BB">Harry Styles</StageCell>
-          <StageCell bgColor="#D8E0BB">Dua Lipa</StageCell>
-          <StageArrow
-            onClick={() => {
-              fullpageApi.moveTo(2, 0);
-            }}
-          >
-            Go This Stage
-          </StageArrow>
+          {stageA.map((stage, idx) => (
+            <StageCell key={idx} stageId={0}>
+              {stage.artist}
+            </StageCell>
+          ))}
+          <StageArrow onClick={goToStage(0)}>Go This Stage</StageArrow>
         </Stage>
         <Stage hour={hour}>
           <StageTitle>Stage B</StageTitle>
-          <StageCell bgColor="#B6CEC7">Billie Eilish</StageCell>
-          <StageCell bgColor="#B6CEC7">Justin Bieber</StageCell>
-          <StageCell bgColor="#B6CEC7">Morgan Wallen</StageCell>
-          <StageCell bgColor="#B6CEC7">Travis Scott</StageCell>
-          <StageCell bgColor="#B6CEC7">Gunna</StageCell>
-          <StageCell bgColor="#B6CEC7">Juice WRLD</StageCell>
-          <StageCell bgColor="#B6CEC7">Lewis Capaldi</StageCell>
-          <StageCell bgColor="#B6CEC7">Megan Thee Stallion</StageCell>
-          <StageCell bgColor="#B6CEC7">BTS</StageCell>
-          <StageCell bgColor="#B6CEC7">Polo G</StageCell>
-          <StageCell bgColor="#B6CEC7">Ariana Grande</StageCell>
-          <StageCell bgColor="#B6CEC7">Doja Cat</StageCell>
-          <StageArrow
-            onClick={() => {
-              fullpageApi.moveTo(2, 1);
-            }}
-          >
-            Go This Stage
-          </StageArrow>
+          {stageB.map((stage, idx) => (
+            <StageCell key={idx} stageId={1}>
+              {stage.artist}
+            </StageCell>
+          ))}
+          <StageArrow onClick={goToStage(1)}>Go This Stage</StageArrow>
         </Stage>
         <Stage hour={hour}>
           <StageTitle>Stage C</StageTitle>
-          <StageCell bgColor="#86A3C3">Sam Hunt</StageCell>
-          <StageCell bgColor="#86A3C3">Future</StageCell>
-          <StageCell bgColor="#86A3C3">Kane Brown</StageCell>
-          <StageCell bgColor="#86A3C3">Halsey</StageCell>
-          <StageCell bgColor="#86A3C3">Khalid</StageCell>
-          <StageCell bgColor="#86A3C3">Mac Miller</StageCell>
-          <StageCell bgColor="#86A3C3">Bad Bunny</StageCell>
-          <StageCell bgColor="#86A3C3">Ed Sheeran</StageCell>
-          <StageCell bgColor="#86A3C3">Luke Bryan</StageCell>
-          <StageCell bgColor="#86A3C3">Thomas Rhett</StageCell>
-          <StageCell bgColor="#86A3C3">Jonas Brothers</StageCell>
-          <StageCell bgColor="#86A3C3">Maren Morris</StageCell>
-          <StageArrow
-            onClick={() => {
-              fullpageApi.moveTo(2, 2);
-            }}
-          >
-            Go This Stage
-          </StageArrow>
+          {stageC.map((stage, idx) => (
+            <StageCell key={idx} stageId={2}>
+              {stage.artist}
+            </StageCell>
+          ))}
+          <StageArrow onClick={goToStage(2)}>Go This Stage</StageArrow>
         </Stage>
       </Content>
     </Wrapper>

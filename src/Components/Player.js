@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled, { keyframes } from "styled-components";
-import youtubeList from "../youtubeList";
+import YouTube from "@u-wave/react-youtube";
 
 const STAGE_NAME = ["STAGE A", "STAGE B", "STAGE C"];
 
@@ -10,12 +10,12 @@ const BANNER_TEXT_DUMMY = [
   "You can use the onChange callback to specify a change handler that will be called when the media query's value changes.",
 ];
 
-const bounce = keyframes`
+const hoverFrames = keyframes`
 0%{
   background-color: white;
 }
 100%{
-  background-color: #6b3074;
+  background-color: ${(props) => props.theme.color.hover};
   color: white;
 }
 `;
@@ -57,16 +57,15 @@ const ScheduleButton = styled.div`
   font-weight: bold;
   &:hover {
     cursor: pointer;
-    background-color: #6b3074;
+    background-color: ${(props) => props.theme.color.hover};
     color: white;
-    animation: ${bounce} 0.2s linear;
+    animation: ${hoverFrames} 0.2s linear;
   }
 `;
 
-const Youtube = styled.div`
+const YoutubeWrapper = styled.div`
   width: 100%;
   height: 70%;
-  background-color: yellow;
 `;
 
 const Banner = styled.div`
@@ -119,51 +118,75 @@ const Button = styled.div`
   font-weight: bold;
   &:hover {
     cursor: pointer;
-    background-color: #6b3074;
+    background-color: ${(props) => props.theme.color.hover};
     color: white;
-    animation: ${bounce} 0.2s linear;
+    animation: ${hoverFrames} 0.2s linear;
   }
 `;
 
-const Player = ({ stageNo, fullpageApi }) => {
+const makeYoutube = (video_id) => {
+  return `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${video_id}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+  // return `<iframe id="ytplayer" type="text/html" width="100%" height="100%"
+  // src="https://www.youtube.com/embed/${video_id}?autoplay=1"
+  // frameborder="0"></iframe>`;
+};
+
+const Player = ({ stageNo, fullpageApi, data, play }) => {
   const [textIndex, setTextIndex] = useState(0);
+  const videoRef = useRef();
+  const onStageData = data[Math.floor(new Date().getHours() / 2)];
 
   useEffect(() => {
     setInterval(() => {
       setTextIndex((v) => (v + 1) % BANNER_TEXT_DUMMY.length);
     }, 20000);
   }, []);
+
+  useEffect(() => {
+    if (play) {
+      videoRef.current.playerInstance.playVideo();
+    }
+  }, [play]);
+
+  const goToStage = (stageIdx) => {
+    return () => {
+      fullpageApi.moveTo(2, stageIdx);
+    };
+  };
+
+  const goToSchedule = () => {
+    return () => {
+      fullpageApi.moveTo(1);
+    };
+  };
+
   return (
     <Wrapper>
       <Header>
         <StageTitle>{STAGE_NAME[stageNo]}</StageTitle>
-        <ScheduleButton
-          onClick={() => {
-            fullpageApi.moveTo(1);
-          }}
-        >
-          Go to Schedule
-        </ScheduleButton>
+        <ScheduleButton onClick={goToSchedule()}>Go to Schedule</ScheduleButton>
       </Header>
-      <Youtube
-        dangerouslySetInnerHTML={{ __html: youtubeList[stageNo] }}
-      ></Youtube>
+      <YoutubeWrapper>
+        <YouTube
+          ref={videoRef}
+          width="100%"
+          height="100%"
+          video={onStageData.video_id}
+          disableKeyboard={false}
+          annotations={false}
+          showRelatedVideos={false}
+          showInfo={false}
+          modestBranding={true}
+        />
+      </YoutubeWrapper>
       <Banner>
-        <BannerText>{BANNER_TEXT_DUMMY[textIndex]}</BannerText>
+        <BannerText>{onStageData.comments[textIndex]}</BannerText>
       </Banner>
       <Footer>
-        <Button
-          onClick={() => {
-            fullpageApi.moveTo(2, (stageNo + 2) % 3);
-          }}
-        >
+        <Button onClick={goToStage((stageNo + 2) % 3)}>
           Go to {STAGE_NAME[(stageNo + 2) % 3]}
         </Button>
-        <Button
-          onClick={() => {
-            fullpageApi.moveTo(2, (stageNo + 1) % 3);
-          }}
-        >
+        <Button onClick={goToStage((stageNo + 1) % 3)}>
           Go to {STAGE_NAME[(stageNo + 1) % 3]}
         </Button>
       </Footer>
