@@ -4,6 +4,7 @@ import { useMediaQuery } from "react-responsive";
 import TimeTable from "./TimeTable";
 import Player from "./Player";
 import { stageA, stageB, stageC } from "../data";
+import Ticket from "./Ticket";
 
 const Home = () => {
   const isMobile = useMediaQuery({ maxWidth: 767 });
@@ -25,43 +26,47 @@ const Home = () => {
   const renderFn = ({ state, fullpageApi }) => {
     return (
       <ReactFullpage.Wrapper>
-        <div className="section">
-          {isMobile ? (
-            <TimeTable screen="mobile" fullpageApi={fullpageApi} />
-          ) : (
-            <TimeTable
-              screen="desktop"
-              state={state}
-              fullpageApi={fullpageApi}
-            />
-          )}
-        </div>
-        <div className="section">
-          <div className="slide" data-anchor="slide1">
-            <Player
-              stageNo={0}
-              fullpageApi={fullpageApi}
-              play={play[0]}
-              data={stageA}
-            />
+        {isMobile ? (
+          <div className="section">
+            <Ticket />
           </div>
-          <div className="slide active" data-anchor="slide2">
-            <Player
-              stageNo={1}
-              fullpageApi={fullpageApi}
-              play={play[1]}
-              data={stageB}
-            />
-          </div>
-          <div className="slide" data-anchor="slide3">
-            <Player
-              stageNo={2}
-              fullpageApi={fullpageApi}
-              play={play[2]}
-              data={stageC}
-            />
-          </div>
-        </div>
+        ) : (
+          <>
+            <div className="section">
+              <TimeTable
+                screen="desktop"
+                state={state}
+                fullpageApi={fullpageApi}
+              />
+            </div>
+            <div className="section">
+              <div className="slide" data-anchor="slide1">
+                <Player
+                  stageNo={0}
+                  fullpageApi={fullpageApi}
+                  play={play[0]}
+                  data={stageA}
+                />
+              </div>
+              <div className="slide active" data-anchor="slide2">
+                <Player
+                  stageNo={1}
+                  fullpageApi={fullpageApi}
+                  play={play[1]}
+                  data={stageB}
+                />
+              </div>
+              <div className="slide" data-anchor="slide3">
+                <Player
+                  stageNo={2}
+                  fullpageApi={fullpageApi}
+                  play={play[2]}
+                  data={stageC}
+                />
+              </div>
+            </div>
+          </>
+        )}
       </ReactFullpage.Wrapper>
     );
   };
