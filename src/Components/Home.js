@@ -1,90 +1,74 @@
-import React, { useState } from "react";
-import ReactFullpage from "@fullpage/react-fullpage";
-import { useMediaQuery } from "react-responsive";
-import TimeTable from "./TimeTable";
-import Player from "./Player";
-import { stageA, stageB, stageC } from "../data";
-import Ticket from "./Ticket";
+import React from "react";
+import styled, { keyframes, css } from "styled-components";
+import BounceArrow from "../Images/BounceArrow.png";
+
+const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fedc2e;
+  border: 1px solid black;
+`;
+
+const Logo = styled.div`
+  p {
+    font-family: "Retrock";
+    font-size: 7rem;
+    margin-bottom: 1.5em;
+  }
+`;
+
+const BounceFrame = keyframes`
+  0%, 100% {
+    transform: translateY(0);
+    -webkit-transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+    -webkit-transform: translateY(-10px);
+  }
+`;
+
+const BounceAnimation = css`
+  animation-name: ${BounceFrame};
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  /* animation-fill-mode: both; */
+  -webkit-animation-name: ${BounceFrame};
+  -webkit-animation-duration: 1s;
+  -webkit-animation-timing-function: ease-in-out;
+  -webkit-animation-iteration-count: infinite;
+  /* -webkit-animation-fill-mode: both; */
+`;
+
+const BounceArrowWrapper = styled.div`
+  width: 13vw;
+  height: 13vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 5rem;
+  img {
+    width: 100%;
+    ${BounceAnimation}
+  }
+`;
 
 const Home = () => {
-  const isMobile = useMediaQuery({ maxWidth: 767 });
-  const [play, setPlay] = useState([false, false, false]);
-
-  const afterLoadFn = (origin, destination, direction) => {
-    if (destination.index === 0) {
-      setPlay([false, false, false]);
-    }
-  };
-
-  const afterSlideLoadFn = (section, origin, destination, direction) => {
-    const newPlay = play.map((v, i) => {
-      return i === destination.index ? true : false;
-    });
-    setPlay(newPlay);
-  };
-
-  const renderFn = ({ state, fullpageApi }) => {
-    return (
-      <ReactFullpage.Wrapper>
-        {isMobile ? (
-          <div className="section">
-            <Ticket />
-          </div>
-        ) : (
-          <>
-            <div className="section">
-              <TimeTable
-                screen="desktop"
-                state={state}
-                fullpageApi={fullpageApi}
-              />
-            </div>
-            <div className="section">
-              <div className="slide" data-anchor="slide1">
-                <Player
-                  stageNo={0}
-                  fullpageApi={fullpageApi}
-                  play={play[0]}
-                  data={stageA}
-                />
-              </div>
-              <div className="slide active" data-anchor="slide2">
-                <Player
-                  stageNo={1}
-                  fullpageApi={fullpageApi}
-                  play={play[1]}
-                  data={stageB}
-                />
-              </div>
-              <div className="slide" data-anchor="slide3">
-                <Player
-                  stageNo={2}
-                  fullpageApi={fullpageApi}
-                  play={play[2]}
-                  data={stageC}
-                />
-              </div>
-            </div>
-          </>
-        )}
-      </ReactFullpage.Wrapper>
-    );
-  };
-
   return (
-    <ReactFullpage
-      //fullpage options
-      licenseKey="OPEN-SOURCE-GPLV3-LICENSE"
-      scrollingSpeed={800} /* Options here */
-      controlArrows={false}
-      loopHorizontal={false}
-      normalScrollElements="div"
-      keyboardScrolling={false}
-      //fullpage events
-      afterLoad={afterLoadFn}
-      afterSlideLoad={afterSlideLoadFn}
-      render={renderFn}
-    />
+    <Wrapper>
+      <Logo>
+        <p>AlwaysFestival3</p>
+      </Logo>
+      <BounceArrowWrapper>
+        <img src={BounceArrow} alt="BounceArrow"></img>
+      </BounceArrowWrapper>
+    </Wrapper>
   );
 };
 

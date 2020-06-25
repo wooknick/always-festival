@@ -24,12 +24,13 @@ const Title = styled.div`
 `;
 
 const TitleText = styled.div`
-  font-size: 32px;
-  text-transform: uppercase;
+  font-size: 70px;
+  /* text-transform: uppercase; */
   flex: 0.5;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: "Retrock";
 `;
 
 const Info = styled.div`
@@ -192,7 +193,7 @@ const TimeTable = ({ screen, state, fullpageApi }) => {
   ) : (
     <Wrapper>
       <Title>
-        <TitleText>Timetable</TitleText>
+        <TitleText>AlwaysFestival3</TitleText>
         <Info>
           <InfoText>Enjoy the Festival of Legends!</InfoText>
           <InfoText>Every 2 hours, New Stage Come.</InfoText>

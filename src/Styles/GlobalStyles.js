@@ -7,8 +7,8 @@ export default createGlobalStyle`
     *{
         box-sizing: border-box;
     }
-    body{
-        font-size: 18px;
+    html, body{
+        font-size: 16px;
     }
     a{
         text-decoration: none;
