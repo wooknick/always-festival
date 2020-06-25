@@ -34,7 +34,7 @@ const Fullpage = () => {
         </div>
         <div className="section active">
           <div className="slide active" data-anchor="slide1">
-            <Home />
+            <Home fullpageApi={fullpageApi} />
           </div>
           <div className="slide" data-anchor="slide2">
             <Stage />
@@ -60,7 +60,7 @@ const Fullpage = () => {
       scrollingSpeed={800} /* Options here */
       controlArrows={false}
       loopHorizontal={false}
-      normalScrollElements="div"
+      // normalScrollElements="div"
       keyboardScrolling={true}
       //fullpage events
       afterLoad={afterLoadFn}

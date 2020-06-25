@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled, { keyframes, css } from "styled-components";
 import BounceArrow from "../Images/BounceArrow.png";
 
@@ -10,13 +10,13 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   background-color: #fedc2e;
-  border: 1px solid black;
 `;
 
 const Logo = styled.div`
+  /* width: 90vw; */
   p {
     font-family: "Retrock";
-    font-size: 7rem;
+    font-size: 28vw;
     margin-bottom: 1.5em;
   }
 `;
@@ -37,17 +37,17 @@ const BounceAnimation = css`
   animation-duration: 1s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
-  /* animation-fill-mode: both; */
+  animation-fill-mode: both;
   -webkit-animation-name: ${BounceFrame};
   -webkit-animation-duration: 1s;
   -webkit-animation-timing-function: ease-in-out;
   -webkit-animation-iteration-count: infinite;
-  /* -webkit-animation-fill-mode: both; */
+  -webkit-animation-fill-mode: both;
 `;
 
 const BounceArrowWrapper = styled.div`
-  width: 13vw;
-  height: 13vw;
+  width: 4rem;
+  height: 4rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -59,7 +59,13 @@ const BounceArrowWrapper = styled.div`
   }
 `;
 
-const Home = () => {
+const Home = ({ fullpageApi }) => {
+  useEffect(() => {
+    console.log(fullpageApi);
+    if (fullpageApi) {
+      fullpageApi.setAllowScrolling(false, "left, right");
+    }
+  }, [fullpageApi]);
   return (
     <Wrapper>
       <Logo>
