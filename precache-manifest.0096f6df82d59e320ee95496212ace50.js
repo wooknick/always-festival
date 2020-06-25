@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "8f3a8120ad3b1f9daed2b7c5700546d3",
+    "revision": "b23c425e571654673e78e32f373789db",
     "url": "/always-festival/index.html"
   },
   {
-    "revision": "44274de47aed085b49e7",
+    "revision": "27dc61b19cd630893528",
     "url": "/always-festival/static/css/2.e6808bd0.chunk.css"
   },
   {
-    "revision": "261cb586f3974940b99a",
-    "url": "/always-festival/static/css/main.78507a21.chunk.css"
+    "revision": "2b1f3a7cd1c2f522e1b9",
+    "url": "/always-festival/static/css/main.63cccbe9.chunk.css"
   },
   {
-    "revision": "44274de47aed085b49e7",
-    "url": "/always-festival/static/js/2.b8a04a55.chunk.js"
+    "revision": "27dc61b19cd630893528",
+    "url": "/always-festival/static/js/2.7dcef4c0.chunk.js"
   },
   {
     "revision": "30efa1e1cd19d9c6774b40e453f38caf",
-    "url": "/always-festival/static/js/2.b8a04a55.chunk.js.LICENSE.txt"
+    "url": "/always-festival/static/js/2.7dcef4c0.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "261cb586f3974940b99a",
-    "url": "/always-festival/static/js/main.ed1fd2b9.chunk.js"
+    "revision": "2b1f3a7cd1c2f522e1b9",
+    "url": "/always-festival/static/js/main.c183ede8.chunk.js"
   },
   {
     "revision": "0677c53772bb8e437985",
@@ -46,5 +46,17 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "7fd0a1c70cb33fcc2a9e14d18a7e2431",
     "url": "/always-festival/static/media/Retrock.7fd0a1c7.eot"
+  },
+  {
+    "revision": "51150fe97abc6399b0bdb9ef57860cea",
+    "url": "/always-festival/static/media/stageA.51150fe9.jpg"
+  },
+  {
+    "revision": "06fdc2605da3540c3af5e5b30a4a377e",
+    "url": "/always-festival/static/media/stageB.06fdc260.jpg"
+  },
+  {
+    "revision": "a183cb06c4a63b39ac3ed2b9acf4cfed",
+    "url": "/always-festival/static/media/stageC.a183cb06.jpg"
   }
 ]);

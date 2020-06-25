@@ -1,26 +1,29 @@
 {
   "files": {
-    "main.css": "/always-festival/static/css/main.78507a21.chunk.css",
-    "main.js": "/always-festival/static/js/main.ed1fd2b9.chunk.js",
-    "main.js.map": "/always-festival/static/js/main.ed1fd2b9.chunk.js.map",
+    "main.css": "/always-festival/static/css/main.63cccbe9.chunk.css",
+    "main.js": "/always-festival/static/js/main.c183ede8.chunk.js",
+    "main.js.map": "/always-festival/static/js/main.c183ede8.chunk.js.map",
     "runtime-main.js": "/always-festival/static/js/runtime-main.58563d44.js",
     "runtime-main.js.map": "/always-festival/static/js/runtime-main.58563d44.js.map",
     "static/css/2.e6808bd0.chunk.css": "/always-festival/static/css/2.e6808bd0.chunk.css",
-    "static/js/2.b8a04a55.chunk.js": "/always-festival/static/js/2.b8a04a55.chunk.js",
-    "static/js/2.b8a04a55.chunk.js.map": "/always-festival/static/js/2.b8a04a55.chunk.js.map",
+    "static/js/2.7dcef4c0.chunk.js": "/always-festival/static/js/2.7dcef4c0.chunk.js",
+    "static/js/2.7dcef4c0.chunk.js.map": "/always-festival/static/js/2.7dcef4c0.chunk.js.map",
     "index.html": "/always-festival/index.html",
-    "precache-manifest.c26bef7ca40b2319df6991103b4469a2.js": "/always-festival/precache-manifest.c26bef7ca40b2319df6991103b4469a2.js",
+    "precache-manifest.0096f6df82d59e320ee95496212ace50.js": "/always-festival/precache-manifest.0096f6df82d59e320ee95496212ace50.js",
     "service-worker.js": "/always-festival/service-worker.js",
     "static/css/2.e6808bd0.chunk.css.map": "/always-festival/static/css/2.e6808bd0.chunk.css.map",
-    "static/css/main.78507a21.chunk.css.map": "/always-festival/static/css/main.78507a21.chunk.css.map",
-    "static/js/2.b8a04a55.chunk.js.LICENSE.txt": "/always-festival/static/js/2.b8a04a55.chunk.js.LICENSE.txt",
-    "static/media/App.css": "/always-festival/static/media/Retrock.7fd0a1c7.eot"
+    "static/css/main.63cccbe9.chunk.css.map": "/always-festival/static/css/main.63cccbe9.chunk.css.map",
+    "static/js/2.7dcef4c0.chunk.js.LICENSE.txt": "/always-festival/static/js/2.7dcef4c0.chunk.js.LICENSE.txt",
+    "static/media/font.css": "/always-festival/static/media/Retrock.7fd0a1c7.eot",
+    "static/media/stageA.jpg": "/always-festival/static/media/stageA.51150fe9.jpg",
+    "static/media/stageB.jpg": "/always-festival/static/media/stageB.06fdc260.jpg",
+    "static/media/stageC.jpg": "/always-festival/static/media/stageC.a183cb06.jpg"
   },
   "entrypoints": [
     "static/js/runtime-main.58563d44.js",
     "static/css/2.e6808bd0.chunk.css",
-    "static/js/2.b8a04a55.chunk.js",
-    "static/css/main.78507a21.chunk.css",
-    "static/js/main.ed1fd2b9.chunk.js"
+    "static/js/2.7dcef4c0.chunk.js",
+    "static/css/main.63cccbe9.chunk.css",
+    "static/js/main.c183ede8.chunk.js"
   ]
 }
