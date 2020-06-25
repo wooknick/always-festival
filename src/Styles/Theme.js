@@ -1,12 +1,8 @@
 export default {
   color: {
-    title: "#195c77",
-    point: "#7268a6",
-    hover: "#6b3074",
-    stage: [
-      { background: "#D8E0BB" },
-      { background: "#B6CEC7" },
-      { background: "#86A3C3" },
-    ],
+    home: { background: "#fedc2e" },
+    stageA: { background: "#694A74" },
+    stageB: { background: "#B3CBD7" },
+    stageC: { background: "#DE1F1F" },
   },
 };

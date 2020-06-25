@@ -13,6 +13,9 @@ const Fullpage = () => {
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const [play, setPlay] = useState([false, false, false]);
 
+  const [activeSection, setActiveSection] = useState(1);
+  const [activeSlide, setActiveSlide] = useState("home");
+
   const afterLoadFn = (origin, destination, direction) => {
     if (destination.index === 0) {
       setPlay([false, false, false]);
@@ -26,28 +29,40 @@ const Fullpage = () => {
     setPlay(newPlay);
   };
 
+  const handleOnLeave = (origin, destination, direction) => {
+    if (activeSlide === "home" && destination.index === 0) {
+      return false;
+    }
+
+    setActiveSection(destination);
+  };
+
+  const handleOnSlideLeave = (section, origin, destination, direction) => {
+    setActiveSlide(destination.anchor);
+  };
+
   const renderFn = ({ state, fullpageApi }) => {
     return (
       <ReactFullpage.Wrapper>
         <div className="section">
-          <Lineup />
+          <Lineup from={activeSlide} />
         </div>
         <div className="section active">
-          <div className="slide active" data-anchor="slide1">
+          <div className="slide active" data-anchor="home">
             <Home fullpageApi={fullpageApi} />
           </div>
-          <div className="slide" data-anchor="slide2">
-            <Stage />
+          <div className="slide" data-anchor="stageA">
+            <Stage fullpageApi={fullpageApi} from={activeSlide} data={stageA} />
           </div>
-          <div className="slide" data-anchor="slide3">
-            <Stage />
+          <div className="slide" data-anchor="stageB">
+            <Stage fullpageApi={fullpageApi} from={activeSlide} data={stageB} />
           </div>
-          <div className="slide" data-anchor="slide4">
-            <Stage />
+          <div className="slide" data-anchor="stageC">
+            <Stage fullpageApi={fullpageApi} from={activeSlide} data={stageC} />
           </div>
         </div>
         <div className="section">
-          <Navigation />
+          <Navigation fullpageApi={fullpageApi} from={activeSlide} />
         </div>
       </ReactFullpage.Wrapper>
     );
@@ -63,8 +78,10 @@ const Fullpage = () => {
       // normalScrollElements="div"
       keyboardScrolling={true}
       //fullpage events
-      afterLoad={afterLoadFn}
-      afterSlideLoad={afterSlideLoadFn}
+      // afterLoad={afterLoadFn}
+      // afterSlideLoad={afterSlideLoadFn}
+      onLeave={handleOnLeave}
+      onSlideLeave={handleOnSlideLeave}
       render={renderFn}
     />
   );

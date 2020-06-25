@@ -9,11 +9,10 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #fedc2e;
+  background-color: ${(props) => props.theme.color.home.background};
 `;
 
 const Logo = styled.div`
-  /* width: 90vw; */
   p {
     font-family: "Retrock";
     font-size: 28vw;
@@ -61,11 +60,16 @@ const BounceArrowWrapper = styled.div`
 
 const Home = ({ fullpageApi }) => {
   useEffect(() => {
-    console.log(fullpageApi);
     if (fullpageApi) {
       fullpageApi.setAllowScrolling(false, "left, right");
     }
+    return () => {
+      if (fullpageApi) {
+        fullpageApi.setAllowScrolling(true, "left, right");
+      }
+    };
   }, [fullpageApi]);
+
   return (
     <Wrapper>
       <Logo>
