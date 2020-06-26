@@ -65,6 +65,7 @@ const Time = styled.div`
 const Artist = styled.div`
   height: 18%;
   max-height: 7.2rem;
+  text-transform: uppercase;
   width: 80vw;
   div {
     display: flex;
@@ -85,6 +86,15 @@ const Video = styled.div`
   flex: 1;
 `;
 
+const VideoOverlay = styled.div`
+  height: 42%;
+  width: 100%;
+  background-color: transparent;
+  position: absolute;
+  top: auto;
+  left: auto;
+`;
+
 const YoutubeWrapper = styled.div`
   width: 100%;
   height: 90%;
@@ -102,7 +112,7 @@ const Comment = styled.div`
   padding: 0px 30px;
 `;
 
-const marquee = keyframes`
+const MarqueeFrame = keyframes`
   from{
     -webkit-transform: translate(100%, 0);
     transform: translate(100%, 0);
@@ -113,6 +123,19 @@ const marquee = keyframes`
   }
   `;
 
+const MarqueeAnimation = css`
+  animation-name: ${MarqueeFrame};
+  animation-duration: 20s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  -webkit-animation-name: ${MarqueeFrame};
+  -webkit-animation-duration: 20s;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-fill-mode: both;
+`;
+
 const CommentText = styled.div`
   min-width: 100%;
   width: max-content;
@@ -120,7 +143,7 @@ const CommentText = styled.div`
   height: 50px;
   display: flex;
   align-items: center;
-  animation: ${marquee} 20s linear infinite;
+  ${MarqueeAnimation};
 `;
 
 const BounceFrame = keyframes`
@@ -160,8 +183,9 @@ const BounceArrowWrapper = styled.div`
   }
 `;
 
-const Stage = ({ fullpageApi, from, data }) => {
+const Stage = ({ fullpageApi, from, data, fixed }) => {
   const [textIndex, setTextIndex] = useState(0);
+  const [overlayHide, setOverlayHide] = useState(false);
   const videoRef = useRef(); // for youtbe api
 
   useEffect(() => {
@@ -189,6 +213,12 @@ const Stage = ({ fullpageApi, from, data }) => {
     };
   };
 
+  const handleOverlay = () => {
+    videoRef.current.playerInstance.playVideo();
+    setOverlayHide(true);
+    return;
+  };
+
   return (
     <Wrapper from={from}>
       <Logo onClick={goHome()}>
@@ -208,22 +238,26 @@ const Stage = ({ fullpageApi, from, data }) => {
         </Textfit>
       </Artist>
       <Video>
-        <YoutubeWrapper
+        {!overlayHide && from === fixed && (
+          <VideoOverlay from={from} onClick={handleOverlay} />
+        )}
+        {/* <YoutubeWrapper
+          ref={videoRef}
           dangerouslySetInnerHTML={getYoutubeIframe(data.video_id)}
-        />
-        {/* <YoutubeWrapper>
+        /> */}
+        <YoutubeWrapper>
           <YouTube
             ref={videoRef}
             width="100%"
             height="100%"
-            video={onStageData.video_id}
-            disableKeyboard={true}
-            annotations={false}
-            showRelatedVideos={false}
-            showInfo={false}
-            modestBranding={true}
+            video={data.video_id}
+            playsInline={true}
+            controls={true}
+            onPause={() => {
+              setOverlayHide(false);
+            }}
           />
-        </YoutubeWrapper> */}
+        </YoutubeWrapper>
         <Comment>
           <CommentText>{data.comments[textIndex]}</CommentText>
         </Comment>

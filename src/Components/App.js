@@ -15,17 +15,18 @@ const Landscape = styled.div`
   z-index: 10;
   width: 100%;
   height: 100%;
-  background-color: white;
+  background-color: ${(props) => props.theme.color.home.background};
   color: #061820;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   div {
-    font-size: 40px;
+    font-size: 2rem;
     font-weight: bold;
-    font-family: "Great Vibes", cursive;
+    text-transform: uppercase;
+    font-family: "Montserrat", sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
 `;
 
@@ -34,6 +35,9 @@ const App = () => {
     <ThemeProvider theme={Theme}>
       <>
         <GlobalStyles />
+        <Landscape>
+          <div>YOU'LL NEED TO TURN IT THE RIGHT WAY</div>
+        </Landscape>
         <Fullpage />
       </>
     </ThemeProvider>

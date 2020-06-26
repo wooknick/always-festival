@@ -49,7 +49,7 @@ export const stageA = [
   },
   {
     artist: "Carpenters",
-    video_id: " 1MCarkGd4Xk",
+    video_id: "1MCarkGd4Xk",
     comments: [
       "She was so beautiful. Her voice will endure forever as one of the best of all times.",
       "There was absolutely no difference between her live voice and her recorded albums... she sang with perfection every time. What a gift they were to all of us…",

@@ -70,6 +70,7 @@ const Fullpage = () => {
               fullpageApi={fullpageApi}
               from={activeSlide}
               data={lineupStageA[activeStageA]}
+              fixed={"stageA"}
             />
           </div>
           <div className="slide" data-anchor="stageB">
@@ -77,6 +78,7 @@ const Fullpage = () => {
               fullpageApi={fullpageApi}
               from={activeSlide}
               data={lineupStageB[activeStageB]}
+              fixed={"stageB"}
             />
           </div>
           <div className="slide" data-anchor="stageC">
@@ -84,6 +86,7 @@ const Fullpage = () => {
               fullpageApi={fullpageApi}
               from={activeSlide}
               data={lineupStageC[activeStageC]}
+              fixed={"stageC"}
             />
           </div>
         </div>
