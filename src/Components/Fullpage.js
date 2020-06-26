@@ -40,8 +40,15 @@ const Fullpage = () => {
   useEffect(() => {
     const getData = async () => {
       const dataURL = `https://raw.githubusercontent.com/wooknick/always-festival/master/src/test.json`;
+      // const dataURL = `https://api.jsonbin.io/b/5ef6047f2406353b2e0d2198`;
       try {
         const response = await axios.get(dataURL);
+        // const response = await axios.get(dataURL, {
+        //   headers: {
+        //     "secret-key":
+        //       "$2b$10$FkX1bXeCxRlkUGRGfBu3aeanaE7yTFWWk6vzAHixPsEUbYTvcP5.G",
+        //   },
+        // });
         const { data } = response;
         setLineupStageA(data.stageA.slice(0, 6));
         setLineupStageB(data.stageB.slice(0, 6));

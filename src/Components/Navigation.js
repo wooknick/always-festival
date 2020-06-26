@@ -15,7 +15,8 @@ const Wrapper = styled.div`
 
 const Card = styled.div`
   width: 100%;
-  height: 12rem;
+  height: 30%;
+  max-height: 12rem;
   margin-bottom: 10px;
   background-image: url(${(props) => props.imgSrc});
   background-size: cover;

@@ -11,9 +11,6 @@ export default createGlobalStyle`
         font-size: 16px;
         font-family: Arial, Helvetica, sans-serif;
     }
-    html{
-        background-color: #fedc2e;
-    }
     a{
         text-decoration: none;
     }

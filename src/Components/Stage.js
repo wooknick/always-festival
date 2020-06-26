@@ -3,6 +3,7 @@ import styled, { keyframes, css } from "styled-components";
 import BounceArrow from "../Images/BounceArrow.png";
 import { Textfit } from "react-textfit";
 import YouTube from "@u-wave/react-youtube"; // for youtube api
+import { useMediaQuery } from "react-responsive";
 
 const STAGE_NAME = {
   home: "STAGE A",
@@ -50,7 +51,7 @@ const Info = styled.div`
 
 const StageTitle = styled.div`
   font-weight: bold;
-  font-size: 3.8rem;
+  font-size: 3.6rem;
   -webkit-text-stroke: 2.5px black;
   color: ${(props) => props.theme.color[`${props.from}`].background};
 `;
@@ -102,7 +103,8 @@ const YoutubeWrapper = styled.div`
 
 const Comment = styled.div`
   width: 100%;
-  height: 50px;
+  max-height: 50px;
+  height: 10%;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
   display: flex;
@@ -152,8 +154,8 @@ const BounceFrame = keyframes`
     -webkit-transform: translateY(0);
   }
   50% {
-    transform: translateY(-10px);
-    -webkit-transform: translateY(-10px);
+    transform: translateY(-5px);
+    -webkit-transform: translateY(-5px);
   }
 `;
 
@@ -171,15 +173,20 @@ const BounceAnimation = css`
 `;
 
 const BounceArrowWrapper = styled.div`
-  width: 2.5rem;
-  height: 10%;
+  width: 2rem;
+  height: max-content;
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  padding-bottom: 10px;
+  padding-bottom: 7px;
   img {
     width: 100%;
     ${BounceAnimation}
+  }
+  svg {
+    transform: rotateZ(90deg);
+    width: 70%;
+    height: 70%;
   }
 `;
 
@@ -187,6 +194,10 @@ const Stage = ({ fullpageApi, from, data, fixed }) => {
   const [textIndex, setTextIndex] = useState(0);
   const [overlayHide, setOverlayHide] = useState(false);
   const videoRef = useRef(); // for youtbe api
+
+  const isNotTooSmall = useMediaQuery({
+    query: "(min-device-height: 667px)",
+  });
 
   useEffect(() => {
     if (data) {
@@ -268,7 +279,18 @@ const Stage = ({ fullpageApi, from, data, fixed }) => {
         </Comment>
       </Video>
       <BounceArrowWrapper>
-        <img src={BounceArrow} alt="BounceArrow"></img>
+        {isNotTooSmall ? (
+          <img src={BounceArrow} alt="BounceArrow" />
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+          >
+            <path d="M10.477 0h-8.977l12.024 12-12.024 12h8.977l12.023-12z" />
+          </svg>
+        )}
       </BounceArrowWrapper>
     </Wrapper>
   );

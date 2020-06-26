@@ -15,8 +15,8 @@ const Landscape = styled.div`
   z-index: 10;
   width: 100%;
   height: 100%;
-  background-color: ${(props) => props.theme.color.home.background};
-  color: #061820;
+  background-color: white;
+  color: black;
   display: flex;
   flex-direction: column;
   align-items: center;
