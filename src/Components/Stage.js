@@ -2,9 +2,14 @@ import React, { useRef, useState, useEffect } from "react";
 import styled, { keyframes, css } from "styled-components";
 import BounceArrow from "../Images/BounceArrow.png";
 import { Textfit } from "react-textfit";
-import YouTube from "@u-wave/react-youtube";
+import YouTube from "@u-wave/react-youtube"; // for youtube api
 
-const STAGE_NAME = { stageA: "STAGE A", stageB: "STAGE B", stageC: "STAGE C" };
+const STAGE_NAME = {
+  home: "STAGE A",
+  stageA: "STAGE A",
+  stageB: "STAGE B",
+  stageC: "STAGE C",
+};
 
 const Wrapper = styled.div`
   width: 100%;
@@ -24,6 +29,9 @@ const Logo = styled.div`
     margin-top: -0.2em;
     font-family: "Retrock";
     font-size: 3.4rem;
+  }
+  &:hover {
+    cursor: pointer;
   }
 `;
 
@@ -154,32 +162,57 @@ const BounceArrowWrapper = styled.div`
 
 const Stage = ({ fullpageApi, from, data }) => {
   const [textIndex, setTextIndex] = useState(0);
-  const videoRef = useRef();
-  const onStageData = data[Math.floor(new Date().getHours() / 2)];
+  const videoRef = useRef(); // for youtbe api
 
   useEffect(() => {
     setInterval(() => {
-      setTextIndex((v) => (v + 1) % onStageData.comments.length);
+      setTextIndex((v) => (v + 1) % data.comments.length);
     }, 20000);
-  }, [onStageData]);
+  }, [data.comments.length]);
+
+  const goHome = () => {
+    return () => {
+      fullpageApi.silentMoveTo(2, 0);
+    };
+  };
+
+  const getYoutubeIframe = (video_id) => {
+    return {
+      __html: `<iframe
+      id="ytplayer"
+      type="text/html"
+      width="100%"
+      height="100%"
+      src="https://www.youtube.com/embed/${video_id}?autoplay=1&playsinline=1"
+      frameborder="0"
+     />`,
+    };
+  };
 
   return (
     <Wrapper from={from}>
-      <Logo>
+      <Logo onClick={goHome()}>
         <span>AlwaysFestival3</span>
       </Logo>
       <Info>
         <StageTitle from={from}>{STAGE_NAME[from]}</StageTitle>
-        <Time>12:00 - 14:00</Time>
+        <Time>
+          {`${Math.floor(new Date().getHours() / 2) * 2}:00 - ${
+            Math.floor(new Date().getHours() / 2) * 2 + 2
+          }:00`}
+        </Time>
       </Info>
       <Artist>
         <Textfit mode="single" max={80} forceSingleModeWidth={true}>
-          {onStageData.artist}
+          {data.artist}
         </Textfit>
       </Artist>
       <Video>
-        <YoutubeWrapper>
-          {/* <YouTube
+        <YoutubeWrapper
+          dangerouslySetInnerHTML={getYoutubeIframe(data.video_id)}
+        />
+        {/* <YoutubeWrapper>
+          <YouTube
             ref={videoRef}
             width="100%"
             height="100%"
@@ -189,18 +222,10 @@ const Stage = ({ fullpageApi, from, data }) => {
             showRelatedVideos={false}
             showInfo={false}
             modestBranding={true}
-          /> */}
-          <iframe
-            id="ytplayer"
-            type="text/html"
-            width="100%"
-            height="100%"
-            src={`https://www.youtube.com/embed/${onStageData.video_id}?autoplay=1&playsinline=1`}
-            frameborder="0"
-          ></iframe>
-        </YoutubeWrapper>
+          />
+        </YoutubeWrapper> */}
         <Comment>
-          <CommentText>{onStageData.comments[textIndex]}</CommentText>
+          <CommentText>{data.comments[textIndex]}</CommentText>
         </Comment>
       </Video>
       <BounceArrowWrapper>

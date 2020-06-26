@@ -1,24 +1,46 @@
 import React, { useState } from "react";
 import ReactFullpage from "@fullpage/react-fullpage";
-import { useMediaQuery } from "react-responsive";
-import TimeTable from "./TimeTable";
-import Player from "./Player";
 import { stageA, stageB, stageC } from "../data";
 import Home from "./Home";
 import Stage from "./Stage";
 import Lineup from "./Lineup";
 import Navigation from "./Navigation";
+import DataContext from "./DataContext";
 
 const Fullpage = () => {
   const [activeSection, setActiveSection] = useState(1);
   const [activeSlide, setActiveSlide] = useState("home");
   const [activeData, setActiveData] = useState(stageA);
 
+  const [activeStageA, setActiveStageA] = useState(
+    Math.floor(Math.random() * 6)
+  );
+  const [activeStageB, setActiveStageB] = useState(
+    Math.floor(Math.random() * 6)
+  );
+  const [activeStageC, setActiveStageC] = useState(
+    Math.floor(Math.random() * 6)
+  );
+  const [lineupStageA, setLineupStageA] = useState(stageA.slice(0, 6));
+  const [lineupStageB, setLineupStageB] = useState(stageB.slice(0, 6));
+  const [lineupStageC, setLineupStageC] = useState(stageC.slice(0, 6));
+
+  const contextData = {
+    activeStageA,
+    setActiveStageA,
+    activeStageB,
+    setActiveStageB,
+    activeStageC,
+    setActiveStageC,
+    lineupStageA,
+    lineupStageB,
+    lineupStageC,
+  };
+
   const handleOnLeave = (origin, destination, direction) => {
     if (activeSlide === "home" && destination.index === 0) {
       return false;
     }
-
     setActiveSection(destination);
   };
 
@@ -36,21 +58,33 @@ const Fullpage = () => {
   const renderFn = ({ state, fullpageApi }) => {
     return (
       <ReactFullpage.Wrapper>
-        <div className="section active">
+        <div className="section">
           <Lineup from={activeSlide} data={activeData} />
         </div>
-        <div className="section">
+        <div className="section active">
           <div className="slide active" data-anchor="home">
             <Home fullpageApi={fullpageApi} />
           </div>
           <div className="slide" data-anchor="stageA">
-            <Stage fullpageApi={fullpageApi} from={activeSlide} data={stageA} />
+            <Stage
+              fullpageApi={fullpageApi}
+              from={activeSlide}
+              data={lineupStageA[activeStageA]}
+            />
           </div>
           <div className="slide" data-anchor="stageB">
-            <Stage fullpageApi={fullpageApi} from={activeSlide} data={stageB} />
+            <Stage
+              fullpageApi={fullpageApi}
+              from={activeSlide}
+              data={lineupStageB[activeStageB]}
+            />
           </div>
           <div className="slide" data-anchor="stageC">
-            <Stage fullpageApi={fullpageApi} from={activeSlide} data={stageC} />
+            <Stage
+              fullpageApi={fullpageApi}
+              from={activeSlide}
+              data={lineupStageC[activeStageC]}
+            />
           </div>
         </div>
         <div className="section">
@@ -61,21 +95,21 @@ const Fullpage = () => {
   };
 
   return (
-    <ReactFullpage
-      //fullpage options
-      licenseKey="?E?8d8Q#o2"
-      scrollingSpeed={800} /* Options here */
-      controlArrows={false}
-      loopHorizontal={false}
-      // normalScrollElements="div"
-      keyboardScrolling={true}
-      //fullpage events
-      // afterLoad={afterLoadFn}
-      // afterSlideLoad={afterSlideLoadFn}
-      onLeave={handleOnLeave}
-      onSlideLeave={handleOnSlideLeave}
-      render={renderFn}
-    />
+    <DataContext.Provider value={contextData}>
+      <ReactFullpage
+        //fullpage options
+        licenseKey="?E?8d8Q#o2"
+        scrollingSpeed={800} /* Options here */
+        controlArrows={false}
+        loopHorizontal={false}
+        // normalScrollElements="div.clickable"
+        keyboardScrolling={true}
+        //fullpage events
+        onLeave={handleOnLeave}
+        onSlideLeave={handleOnSlideLeave}
+        render={renderFn}
+      />
+    </DataContext.Provider>
   );
 };
 

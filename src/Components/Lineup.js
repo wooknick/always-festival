@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styled, { css } from "styled-components";
+import DataContext from "./DataContext";
 
 const STAGE_NAME = {
   home: "STAGE 0",
@@ -91,10 +92,54 @@ const Line = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  ${(props) => (props.onstage ? OnStageCSS : OffStageCSS)}
+  ${(props) => (props.onstage === true ? OnStageCSS : OffStageCSS)}
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
-const Lineup = ({ from, data }) => {
+const Lineup = ({ from }) => {
+  const [lineup, setLineup] = useState();
+  const [onStage, setOnStage] = useState();
+  const cd = useContext(DataContext);
+
+  useEffect(() => {
+    if (from === "stageA") {
+      setLineup(cd.lineupStageA);
+      setOnStage(cd.activeStageA);
+    } else if (from === "stageB") {
+      setLineup(cd.lineupStageB);
+      setOnStage(cd.activeStageB);
+    } else if (from === "stageC") {
+      setLineup(cd.lineupStageC);
+      setOnStage(cd.activeStageC);
+    }
+  }, [
+    cd.activeStageA,
+    cd.activeStageB,
+    cd.activeStageC,
+    cd.lineupStageA,
+    cd.lineupStageB,
+    cd.lineupStageC,
+    from,
+  ]);
+
+  const handleOnClick = (event) => {
+    const {
+      currentTarget: {
+        dataset: { code },
+      },
+    } = event;
+    console.log(code);
+    if (from === "stageA") {
+      cd.setActiveStageA(Number(code));
+    } else if (from === "stageB") {
+      cd.setActiveStageB(Number(code));
+    } else if (from === "stageC") {
+      cd.setActiveStageC(Number(code));
+    }
+  };
+
   return (
     <Wrapper from={from}>
       <Header>
@@ -102,12 +147,17 @@ const Lineup = ({ from, data }) => {
         <SubTitle from={from}>LINEUP</SubTitle>
       </Header>
       <Content from={from}>
-        <Line> QUEEN </Line>
-        <Line> QUEEN </Line>
-        <Line> QUEEN </Line>
-        <Line onstage={"onstage"}> QUEEN </Line>
-        <Line> QUEEN </Line>
-        <Line> QUEEN </Line>
+        {lineup &&
+          lineup.map((item, idx) => (
+            <Line
+              key={idx}
+              data-code={idx}
+              onstage={idx === onStage}
+              onClick={handleOnClick}
+            >
+              {item.artist}
+            </Line>
+          ))}
       </Content>
     </Wrapper>
   );

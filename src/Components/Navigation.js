@@ -21,6 +21,9 @@ const Card = styled.div`
   background-size: cover;
   background-repeat: no-repeat;
   background-position-y: ${(props) => props.posY};
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const CardTextWrapper = styled.div`
