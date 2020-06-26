@@ -17,6 +17,7 @@ const Wrapper = styled.div`
 
 const Logo = styled.div`
   height: 10%;
+  max-height: 4rem;
   display: flex;
   align-items: center;
   span {
@@ -28,6 +29,8 @@ const Logo = styled.div`
 
 const Info = styled.div`
   height: 20%;
+  max-height: 8rem;
+  width: 80vw;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
   padding: 20px 0;
@@ -52,7 +55,8 @@ const Time = styled.div`
 `;
 
 const Artist = styled.div`
-  height: 20%;
+  height: 18%;
+  max-height: 7.2rem;
   width: 80vw;
   div {
     display: flex;
@@ -68,8 +72,9 @@ const Artist = styled.div`
 `;
 
 const Video = styled.div`
-  height: 40%;
+  height: 42%;
   width: 100vw;
+  flex: 1;
 `;
 
 const YoutubeWrapper = styled.div`
@@ -168,7 +173,7 @@ const Stage = ({ fullpageApi, from, data }) => {
         <Time>12:00 - 14:00</Time>
       </Info>
       <Artist>
-        <Textfit mode="single" forceSingleModeWidth={true}>
+        <Textfit mode="single" max={80} forceSingleModeWidth={true}>
           {onStageData.artist}
         </Textfit>
       </Artist>

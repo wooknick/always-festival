@@ -10,24 +10,9 @@ import Lineup from "./Lineup";
 import Navigation from "./Navigation";
 
 const Fullpage = () => {
-  const isMobile = useMediaQuery({ maxWidth: 767 });
-  const [play, setPlay] = useState([false, false, false]);
-
   const [activeSection, setActiveSection] = useState(1);
   const [activeSlide, setActiveSlide] = useState("home");
-
-  const afterLoadFn = (origin, destination, direction) => {
-    if (destination.index === 0) {
-      setPlay([false, false, false]);
-    }
-  };
-
-  const afterSlideLoadFn = (section, origin, destination, direction) => {
-    const newPlay = play.map((v, i) => {
-      return i === destination.index ? true : false;
-    });
-    setPlay(newPlay);
-  };
+  const [activeData, setActiveData] = useState(stageA);
 
   const handleOnLeave = (origin, destination, direction) => {
     if (activeSlide === "home" && destination.index === 0) {
@@ -39,15 +24,22 @@ const Fullpage = () => {
 
   const handleOnSlideLeave = (section, origin, destination, direction) => {
     setActiveSlide(destination.anchor);
+    if (destination.anchor === "stageA") {
+      setActiveData(stageA);
+    } else if (destination.anchor === "stageB") {
+      setActiveData(stageB);
+    } else if (destination.anchor === "stageC") {
+      setActiveData(stageC);
+    }
   };
 
   const renderFn = ({ state, fullpageApi }) => {
     return (
       <ReactFullpage.Wrapper>
-        <div className="section">
-          <Lineup from={activeSlide} />
-        </div>
         <div className="section active">
+          <Lineup from={activeSlide} data={activeData} />
+        </div>
+        <div className="section">
           <div className="slide active" data-anchor="home">
             <Home fullpageApi={fullpageApi} />
           </div>
