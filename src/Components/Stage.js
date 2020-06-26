@@ -252,7 +252,6 @@ const Stage = ({ fullpageApi, from, data, fixed }) => {
             height="100%"
             video={data.video_id}
             playsInline={true}
-            controls={true}
             onPause={() => {
               setOverlayHide(false);
             }}
