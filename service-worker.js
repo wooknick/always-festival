@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/always-festival/precache-manifest.9a50a4f661598a011a1de21cc247625e.js"
+  "/always-festival/precache-manifest.2b77264fd9b68f34efc6d6ac17f70a19.js"
 );
 
 self.addEventListener('message', (event) => {
