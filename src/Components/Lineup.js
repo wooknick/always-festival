@@ -131,7 +131,6 @@ const Lineup = ({ from }) => {
         dataset: { code },
       },
     } = event;
-    console.log(code);
     if (from === "stageA") {
       cd.setActiveStageA(Number(code));
     } else if (from === "stageB") {

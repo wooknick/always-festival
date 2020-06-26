@@ -189,10 +189,12 @@ const Stage = ({ fullpageApi, from, data, fixed }) => {
   const videoRef = useRef(); // for youtbe api
 
   useEffect(() => {
-    setInterval(() => {
-      setTextIndex((v) => (v + 1) % data.comments.length);
-    }, 20000);
-  }, [data.comments.length]);
+    if (data) {
+      setInterval(() => {
+        setTextIndex((v) => (v + 1) % data.comments.length);
+      }, 20000);
+    }
+  }, [data]);
 
   const goHome = () => {
     return () => {
@@ -233,9 +235,11 @@ const Stage = ({ fullpageApi, from, data, fixed }) => {
         </Time>
       </Info>
       <Artist>
-        <Textfit mode="single" max={80} forceSingleModeWidth={true}>
-          {data.artist}
-        </Textfit>
+        {data && (
+          <Textfit mode="single" max={80} forceSingleModeWidth={true}>
+            {data.artist}
+          </Textfit>
+        )}
       </Artist>
       <Video>
         {!overlayHide && from === fixed && (
@@ -246,19 +250,21 @@ const Stage = ({ fullpageApi, from, data, fixed }) => {
           dangerouslySetInnerHTML={getYoutubeIframe(data.video_id)}
         /> */}
         <YoutubeWrapper>
-          <YouTube
-            ref={videoRef}
-            width="100%"
-            height="100%"
-            video={data.video_id}
-            playsInline={true}
-            onPause={() => {
-              setOverlayHide(false);
-            }}
-          />
+          {data && (
+            <YouTube
+              ref={videoRef}
+              width="100%"
+              height="100%"
+              video={data.video_id}
+              playsInline={true}
+              onPause={() => {
+                setOverlayHide(false);
+              }}
+            />
+          )}
         </YoutubeWrapper>
         <Comment>
-          <CommentText>{data.comments[textIndex]}</CommentText>
+          {data && <CommentText>{data.comments[textIndex]}</CommentText>}
         </Comment>
       </Video>
       <BounceArrowWrapper>

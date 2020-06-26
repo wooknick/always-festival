@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactFullpage from "@fullpage/react-fullpage";
-import { stageA, stageB, stageC } from "../data";
 import Home from "./Home";
 import Stage from "./Stage";
 import Lineup from "./Lineup";
 import Navigation from "./Navigation";
 import DataContext from "./DataContext";
+import axios from "axios";
 
 const Fullpage = () => {
   const [activeSection, setActiveSection] = useState(1);
   const [activeSlide, setActiveSlide] = useState("home");
-  const [activeData, setActiveData] = useState(stageA);
+  const [activeData, setActiveData] = useState();
 
   const [activeStageA, setActiveStageA] = useState(
     Math.floor(Math.random() * 6)
@@ -21,9 +21,9 @@ const Fullpage = () => {
   const [activeStageC, setActiveStageC] = useState(
     Math.floor(Math.random() * 6)
   );
-  const [lineupStageA, setLineupStageA] = useState(stageA.slice(0, 6));
-  const [lineupStageB, setLineupStageB] = useState(stageB.slice(0, 6));
-  const [lineupStageC, setLineupStageC] = useState(stageC.slice(0, 6));
+  const [lineupStageA, setLineupStageA] = useState();
+  const [lineupStageB, setLineupStageB] = useState();
+  const [lineupStageC, setLineupStageC] = useState();
 
   const contextData = {
     activeStageA,
@@ -37,6 +37,22 @@ const Fullpage = () => {
     lineupStageC,
   };
 
+  useEffect(() => {
+    const getData = async () => {
+      const dataURL = `https://raw.githubusercontent.com/wooknick/always-festival/master/src/test.json`;
+      try {
+        const response = await axios.get(dataURL);
+        const { data } = response;
+        setLineupStageA(data.stageA.slice(0, 6));
+        setLineupStageB(data.stageB.slice(0, 6));
+        setLineupStageC(data.stageC.slice(0, 6));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getData();
+  }, []);
+
   const handleOnLeave = (origin, destination, direction) => {
     if (activeSlide === "home" && destination.index === 0) {
       return false;
@@ -47,11 +63,11 @@ const Fullpage = () => {
   const handleOnSlideLeave = (section, origin, destination, direction) => {
     setActiveSlide(destination.anchor);
     if (destination.anchor === "stageA") {
-      setActiveData(stageA);
+      setActiveData(lineupStageA);
     } else if (destination.anchor === "stageB") {
-      setActiveData(stageB);
+      setActiveData(lineupStageB);
     } else if (destination.anchor === "stageC") {
-      setActiveData(stageC);
+      setActiveData(lineupStageC);
     }
   };
 
@@ -69,7 +85,7 @@ const Fullpage = () => {
             <Stage
               fullpageApi={fullpageApi}
               from={activeSlide}
-              data={lineupStageA[activeStageA]}
+              data={lineupStageA && lineupStageA[activeStageA]}
               fixed={"stageA"}
             />
           </div>
@@ -77,7 +93,7 @@ const Fullpage = () => {
             <Stage
               fullpageApi={fullpageApi}
               from={activeSlide}
-              data={lineupStageB[activeStageB]}
+              data={lineupStageB && lineupStageB[activeStageB]}
               fixed={"stageB"}
             />
           </div>
@@ -85,7 +101,7 @@ const Fullpage = () => {
             <Stage
               fullpageApi={fullpageApi}
               from={activeSlide}
-              data={lineupStageC[activeStageC]}
+              data={lineupStageC && lineupStageC[activeStageC]}
               fixed={"stageC"}
             />
           </div>
