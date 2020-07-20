@@ -1,8 +1,8 @@
 export default {
   color: {
-    home: { background: "#fedc2e" },
-    stageA: { background: "#694A74" },
-    stageB: { background: "#B3CBD7" },
-    stageC: { background: "#DE1F1F" },
+    mainRed: "#F24B59",
+    mainBlue: "#033E8C",
+    subBlue: "#385DD9",
+    creamBlue: "#99AFF2",
   },
 };
