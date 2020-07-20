@@ -4,7 +4,9 @@ import Fullpage from "./Fullpage";
 import Theme from "../Styles/Theme";
 import styled, { ThemeProvider } from "styled-components";
 
-import "./fonts/font.css";
+import "./fonts/DiscoDiva/font.css";
+import "./fonts/Retrock/font.css";
+import "./fonts/Variete/font.css";
 
 const Landscape = styled.div`
   @media screen and (max-height: 475px) {
