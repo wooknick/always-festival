@@ -8,6 +8,8 @@ export default createGlobalStyle`
         box-sizing: border-box;
     }
     html, body{
+        height: 100%;
+        width: 100%;
         font-size: 16px;
         font-family: Arial, Helvetica, sans-serif;
     }

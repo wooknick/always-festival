@@ -1,10 +1,19 @@
 import React from "react";
 import GlobalStyles from "../Styles/GlobalStyles";
-import Fullpage from "./Fullpage";
 import Theme from "../Styles/Theme";
 import styled, { ThemeProvider } from "styled-components";
+import {
+  HashRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from "react-router-dom";
+import Home from "./Home";
+import Header from "./Header";
 
-import "./fonts/font.css";
+import "./fonts/DiscoDiva/font.css";
+import "./fonts/Retrock/font.css";
+import "./fonts/Variete/font.css";
 
 const Landscape = styled.div`
   @media screen and (max-height: 475px) {
@@ -35,10 +44,15 @@ const App = () => {
     <ThemeProvider theme={Theme}>
       <>
         <GlobalStyles />
-        <Landscape>
-          <div>YOU'LL NEED TO TURN IT THE RIGHT WAY</div>
-        </Landscape>
-        <Fullpage />
+        <Router>
+          <>
+            <Header />
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Redirect from="*" to="/" />
+            </Switch>
+          </>
+        </Router>
       </>
     </ThemeProvider>
   );

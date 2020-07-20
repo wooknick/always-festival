@@ -1,0 +1,12 @@
+@font-face {
+  font-family: 'DiscoDiva';
+  src: url('DiscoDiva.eot');
+  src: url('DiscoDiva.eot?#iefix') format('embedded-opentype'),
+       url('DiscoDiva.svg#DiscoDiva') format('svg'),
+       url('DiscoDiva.ttf') format('truetype'),
+       url('DiscoDiva.woff') format('woff'),
+       url('DiscoDiva.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
