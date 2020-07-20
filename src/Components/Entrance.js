@@ -29,6 +29,10 @@ const Wrapper = styled.div`
   text-transform: uppercase;
   font-family: DiscoDiva;
   -webkit-text-stroke: 2px;
+
+  @media screen and (min-width: 768px) {
+    font-size: 3rem;
+  }
 `;
 
 const Entrance = ({ name, ratio }) => {
