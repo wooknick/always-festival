@@ -12,6 +12,9 @@ export default createGlobalStyle`
         width: 100%;
         font-size: 16px;
         font-family: Arial, Helvetica, sans-serif;
+        /* disable bounce safari/ios */
+        position: fixed;
+        overflow: hidden;
     }
     a{
         text-decoration: none;
