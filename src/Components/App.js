@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import Home from "./Home";
 import Header from "./Header";
+import Stage from "./Stage";
 
 import "./fonts/DiscoDiva/font.css";
 import "./fonts/Retrock/font.css";
@@ -49,6 +50,7 @@ const App = () => {
             <Header />
             <Switch>
               <Route exact path="/" component={Home} />
+              <Route path="/stage/:stage" component={Stage} />
               <Redirect from="*" to="/" />
             </Switch>
           </>

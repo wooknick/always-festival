@@ -4,114 +4,87 @@ import BounceArrow from "../Images/BounceArrow.png";
 import { Textfit } from "react-textfit";
 import YouTube from "@u-wave/react-youtube"; // for youtube api
 import { useMediaQuery } from "react-responsive";
+import StageBlue from "../Images/StageBlue.png";
+import StageRed from "../Images/StageRed.png";
 
-const STAGE_NAME = {
-  home: "STAGE A",
-  stageA: "STAGE A",
-  stageB: "STAGE B",
-  stageC: "STAGE C",
+const LINEUP = {
+  blue: [
+    "BTS 34:50",
+    "WEEKEND 6:20",
+    "BEYONCE 58:40",
+    "Pink Floyd 34:50",
+    "IMAGINE DRAGONS 57:32",
+    "1975 48:59",
+    "Carpenters 42:11",
+    "Queen 17:32",
+    "Prince 29:43",
+    "Whitney Houston 84:14",
+  ],
+  red: [
+    "BILLIE EILISH 34:23",
+    "David Bowie 6:20",
+    "Bob Marley 58:40",
+    "Bob Dylan 34:23",
+    "Beatles 57:32",
+    "Rolling Stones 48:59",
+    "The Who 42:11",
+    "Amy Winehouse 17:32",
+    "jamiroquai 29:43",
+    "Coldplay 84:14",
+  ],
+};
+
+const PLAY_DUMMY = {
+  blue: {
+    id: "SqdE10H4ZCk",
+    artist: "BEYONCE",
+    comment:
+      "Beyoncé deserves every bit of screaming when she gets on that stage",
+  },
+  red: {
+    id: "lpKE6yBw2Os",
+    artist: "BILLIE EILISH",
+    comment: "Billie got a sprained ankle but she still rocking that brace",
+  },
 };
 
 const Wrapper = styled.div`
+  padding-top: 3.5rem;
   width: 100%;
-  height: 100%;
+  height: ${(props) => props.height}px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: ${(props) => props.theme.color[`${props.from}`].background};
-`;
-
-const Logo = styled.div`
-  height: 10%;
-  max-height: 4rem;
-  display: flex;
-  align-items: center;
-  span {
-    margin-top: -0.2em;
-    font-family: "Retrock";
-    font-size: 3.4rem;
-  }
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-const Info = styled.div`
-  height: 20%;
-  max-height: 8rem;
-  width: 80vw;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
-  padding: 20px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-
-const StageTitle = styled.div`
-  font-weight: bold;
-  font-size: 3.6rem;
-  -webkit-text-stroke: 2.5px black;
-  color: ${(props) => props.theme.color[`${props.from}`].background};
-`;
-
-const Time = styled.div`
-  font-weight: bold;
-  -webkit-text-stroke: 1px black;
-  font-size: 2rem;
-  margin-top: 0.3em;
-`;
-
-const Artist = styled.div`
-  height: 18%;
-  max-height: 7.2rem;
-  text-transform: uppercase;
-  width: 80vw;
-  div {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    div {
-      height: auto;
-      font-weight: bold;
-      -webkit-text-stroke: 2px black;
-    }
-  }
+  background-color: ${(props) =>
+    props.stage === "red"
+      ? props.theme.color.mainRed
+      : props.theme.color.mainBlue};
 `;
 
 const Video = styled.div`
-  height: 42%;
+  height: 50%;
   width: 100vw;
   flex: 1;
 `;
 
-const VideoOverlay = styled.div`
-  height: 42%;
-  width: 100%;
-  background-color: transparent;
-  position: absolute;
-  top: auto;
-  left: auto;
-`;
-
 const YoutubeWrapper = styled.div`
   width: 100%;
-  height: 90%;
+  height: 75%;
 `;
 
-const Comment = styled.div`
+const Artist = styled.div`
   width: 100%;
   max-height: 50px;
-  height: 10%;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
+  height: 15%;
   display: flex;
+  justify-content: center;
   align-items: center;
-  position: relative;
-  overflow: hidden;
   padding: 0px 30px;
+  div {
+    font-family: discoDiva;
+    font-size: 1.2rem;
+    color: white;
+  }
 `;
 
 const MarqueeFrame = keyframes`
@@ -138,80 +111,72 @@ const MarqueeAnimation = css`
   -webkit-animation-fill-mode: both;
 `;
 
-const CommentText = styled.div`
-  min-width: 100%;
-  width: max-content;
-  white-space: nowrap;
-  height: 50px;
+const Comment = styled.div`
+  width: 100%;
+  max-height: 50px;
+  height: 10%;
   display: flex;
   align-items: center;
-  ${MarqueeAnimation};
-`;
-
-const BounceFrame = keyframes`
-  0%, 100% {
-    transform: translateY(0);
-    -webkit-transform: translateY(0);
+  position: relative;
+  overflow: hidden;
+  padding: 0px 30px;
+  div {
+    font-family: Mont;
+    color: white;
+    min-width: 100%;
+    width: max-content;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    ${MarqueeAnimation};
   }
-  50% {
-    transform: translateY(-5px);
-    -webkit-transform: translateY(-5px);
-  }
 `;
 
-const BounceAnimation = css`
-  animation-name: ${BounceFrame};
-  animation-duration: 1s;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-  animation-fill-mode: both;
-  -webkit-animation-name: ${BounceFrame};
-  -webkit-animation-duration: 1s;
-  -webkit-animation-timing-function: ease-in-out;
-  -webkit-animation-iteration-count: infinite;
-  -webkit-animation-fill-mode: both;
+const Lineup = styled.div`
+  width: 100%;
+  height: 50%;
+  background-image: url(${(props) => props.image});
+  background-size: 250%;
+  background-position-x: ${(props) => props.x}%;
+  background-position-y: ${(props) => props.y}%;
+  padding: 1rem;
 `;
 
-const BounceArrowWrapper = styled.div`
-  width: 2rem;
-  height: max-content;
+const LineupWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  background-color: white;
+  color: ${(props) =>
+    props.Stage === "red"
+      ? props.theme.color.mainRed
+      : props.theme.color.mainBlue};
+  text-transform: uppercase;
+  border: white 5px solid;
+`;
+
+const LineupItem = styled.div`
+  width: 100%;
+  height: 2.5em;
+  font-size: 1.6rem;
+  color: ${(props) =>
+    props.stage === "red"
+      ? props.theme.color.mainRed
+      : props.theme.color.mainBlue};
   display: flex;
   justify-content: center;
-  align-items: flex-end;
-  padding-bottom: 7px;
-  img {
-    width: 100%;
-    ${BounceAnimation}
-  }
-  svg {
-    transform: rotateZ(90deg);
-    width: 70%;
-    height: 70%;
-  }
+  align-items: center;
+  font-family: "Varietee";
 `;
 
-const Stage = ({ fullpageApi, from, data, fixed }) => {
-  const [textIndex, setTextIndex] = useState(0);
-  const [overlayHide, setOverlayHide] = useState(false);
-  const videoRef = useRef(); // for youtbe api
+const Stage = ({ history, match }) => {
+  const {
+    params: { stage },
+  } = match;
 
-  const isNotTooSmall = useMediaQuery({
-    query: "(min-device-height: 667px)",
-  });
-
-  useEffect(() => {
-    if (data) {
-      setInterval(() => {
-        setTextIndex((v) => (v + 1) % data.comments.length);
-      }, 20000);
-    }
-  }, [data]);
-
-  const goHome = () => {
-    return () => {
-      fullpageApi.silentMoveTo(2, 0);
-    };
-  };
+  const image = stage === "red" ? StageRed : StageBlue;
+  const x = parseInt(Math.random() * 100);
+  const y = parseInt(Math.random() * 100);
 
   const getYoutubeIframe = (video_id) => {
     return {
@@ -226,72 +191,33 @@ const Stage = ({ fullpageApi, from, data, fixed }) => {
     };
   };
 
-  const handleOverlay = () => {
-    videoRef.current.playerInstance.playVideo();
-    setOverlayHide(true);
-    return;
-  };
-
   return (
-    <Wrapper from={from}>
-      <Logo onClick={goHome()}>
-        <span>AlwaysFestival3</span>
-      </Logo>
-      <Info>
-        <StageTitle from={from}>{STAGE_NAME[from]}</StageTitle>
-        <Time>
-          {`${Math.floor(new Date().getHours() / 2) * 2}:00 - ${
-            Math.floor(new Date().getHours() / 2) * 2 + 2
-          }:00`}
-        </Time>
-      </Info>
-      <Artist>
-        {data && (
-          <Textfit mode="single" max={80} forceSingleModeWidth={true}>
-            {data.artist}
-          </Textfit>
-        )}
-      </Artist>
+    <Wrapper stage={stage} height={window.innerHeight}>
       <Video>
-        {!overlayHide && from === fixed && (
-          <VideoOverlay from={from} onClick={handleOverlay} />
-        )}
-        {/* <YoutubeWrapper
-          ref={videoRef}
-          dangerouslySetInnerHTML={getYoutubeIframe(data.video_id)}
-        /> */}
         <YoutubeWrapper>
-          {data && (
-            <YouTube
-              ref={videoRef}
-              width="100%"
-              height="100%"
-              video={data.video_id}
-              playsInline={true}
-              onPause={() => {
-                setOverlayHide(false);
-              }}
-            />
-          )}
+          <YouTube
+            width="100%"
+            height="100%"
+            video={PLAY_DUMMY[stage].id}
+            playsInline={true}
+          />
         </YoutubeWrapper>
+        <Artist>
+          <div>{PLAY_DUMMY[stage].artist}</div>
+        </Artist>
         <Comment>
-          {data && <CommentText>{data.comments[textIndex]}</CommentText>}
+          <div>{PLAY_DUMMY[stage].comment}</div>
         </Comment>
       </Video>
-      <BounceArrowWrapper>
-        {isNotTooSmall ? (
-          <img src={BounceArrow} alt="BounceArrow" />
-        ) : (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-          >
-            <path d="M10.477 0h-8.977l12.024 12-12.024 12h8.977l12.023-12z" />
-          </svg>
-        )}
-      </BounceArrowWrapper>
+      <Lineup stage={stage} image={image} x={x} y={y}>
+        <LineupWrapper stage={stage}>
+          {LINEUP[stage].map((artist, idx) => (
+            <LineupItem key={idx} stage={stage}>
+              {artist}
+            </LineupItem>
+          ))}
+        </LineupWrapper>
+      </Lineup>
     </Wrapper>
   );
 };

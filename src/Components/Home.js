@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Entrance from "./Entrance";
+import { Link } from "react-router-dom";
 
 const Wrapper = styled.div`
   padding-top: 3.5rem;
@@ -17,8 +18,8 @@ const Wrapper = styled.div`
 const Home = () => {
   return (
     <Wrapper height={window.innerHeight}>
-      <Entrance name="red" ratio={50} />
-      <Entrance name="blue" ratio={50} />
+      <Entrance stage="red" ratio={50} />
+      <Entrance stage="blue" ratio={50} />
     </Wrapper>
   );
 };

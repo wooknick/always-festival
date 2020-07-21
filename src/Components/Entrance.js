@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Textfit } from "react-textfit";
+import { Link } from "react-router-dom";
 import StageBlue from "../Images/StageBlue.png";
 import StageRed from "../Images/StageRed.png";
 
@@ -19,7 +19,7 @@ const Wrapper = styled.div`
   height: 100%;
   background-color: white;
   color: ${(props) =>
-    props.name === "red"
+    props.stage === "red"
       ? props.theme.color.mainRed
       : props.theme.color.mainBlue};
   display: flex;
@@ -35,13 +35,15 @@ const Wrapper = styled.div`
   }
 `;
 
-const Entrance = ({ name, ratio }) => {
-  const image = name === "red" ? StageRed : StageBlue;
+const Entrance = ({ stage, ratio }) => {
+  const image = stage === "red" ? StageRed : StageBlue;
   const x = parseInt(Math.random() * 100);
   const y = parseInt(Math.random() * 100);
   return (
-    <Pattern name={name} ratio={ratio} image={image} x={x} y={y}>
-      <Wrapper name={name}>{name} stage</Wrapper>
+    <Pattern stage={stage} ratio={ratio} image={image} x={x} y={y}>
+      <Link to={`/stage/${stage}`}>
+        <Wrapper stage={stage}>{stage} stage</Wrapper>
+      </Link>
     </Pattern>
   );
 };
