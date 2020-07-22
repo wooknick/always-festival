@@ -54,7 +54,18 @@ const PLAY_DUMMY = {
   red: {
     id: "lpKE6yBw2Os",
     artist: "BILLIE EILISH",
-    comment: "Billie got a sprained ankle but she still rocking that brace",
+    comment: [
+      "Billie got a sprained ankle but she still rocking that brace",
+      "shes dead ass jumping and dancing on a broke. leg wtf queen",
+      "I love how she is so natural. She is so comfortable just being herself. You don't see that much anymore.",
+      "i like how she can sing so well even when shes out of breath its amazinggg",
+      "No one ever talks about how good that drummer is doing",
+      "her brother is a gold, she is really lucky to has brother like him",
+      "I'M A BAD GUY DUUUH OOOOOOOOOOOOOOOOOOOOOWWWW LOVE",
+      "i love how she can jump so high even with a boot on",
+      "This drummer (Andrew) is honestly amazing",
+      "her eyes matches her hair, I love it ",
+    ],
   },
 };
 
