@@ -211,6 +211,9 @@ const Stage = ({ history, match }) => {
   const [comIdx, setComIdx] = useState(0);
 
   useEffect(() => {
+    setComments(PLAY_DUMMY[stage].comment);
+  }, [stage]);
+  useEffect(() => {
     const w = comments.map(
       (comment) =>
         parseInt(getTextWidth(comment, "Mont, 16px") * 2) + window.innerWidth
