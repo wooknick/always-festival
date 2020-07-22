@@ -48,6 +48,7 @@ const App = () => {
         <Router>
           <>
             <Header />
+
             <Switch>
               <Route exact path="/" component={Home} />
               <Route path="/stage/:stage" component={Stage} />
