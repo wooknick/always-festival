@@ -205,7 +205,6 @@ const Stage = ({ history, match }) => {
         parseInt(getTextWidth(comment, "Mont, 16px") * 2) + window.innerWidth
     );
     setMarqueeValue(w);
-    console.log(w);
   }, [comments]);
 
   const comRef = useRef();
