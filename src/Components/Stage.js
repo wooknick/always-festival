@@ -38,8 +38,18 @@ const PLAY_DUMMY = {
   blue: {
     id: "SqdE10H4ZCk",
     artist: "BEYONCE",
-    comment:
-      "Beyoncé deserves every bit of screaming when she gets on that stage",
+    comment: [
+      `Beyoncé DID THAT!!! She’s the only artist in this generation that knows how to put on a show. The greatest performer of all time.`,
+      `It’s crazy.`, // 70, 11 = 6.3
+      `She is so unbelievably beautiful.`, // 255, 33 = 7.72
+      `Beyoncé is the best performer I’ve ever seen`, // 354, 44 = 8
+      `Beyoncé deserves every bit of screaming when she gets on that stage`,
+      `Legend`,
+      `She is beautifully awesome .`,
+      `great entertainer even better than michael Jackson`,
+      `I cried when she sang I will always love you`,
+      `Beautiful..just beautiful..`, // 187, 27 = 6.92
+    ],
   },
   red: {
     id: "lpKE6yBw2Os",
@@ -87,25 +97,25 @@ const Artist = styled.div`
   }
 `;
 
-const MarqueeFrame = keyframes`
+const MarqueeFrame = (width) => keyframes`
   from{
-    -webkit-transform: translate(100%, 0);
-    transform: translate(100%, 0);
+    -webkit-transform: translate(${width}px, 0);
+    transform: translate(${width}px, 0);
   }
   to{
-    -webkit-transform: translate(100%, 0);
-    transform: translate(-100%, 0);
+    -webkit-transform: translate(-110%, 0);
+    transform: translate(-110%, 0);
   }
   `;
 
-const MarqueeAnimation = css`
-  animation-name: ${MarqueeFrame};
-  animation-duration: 20s;
+const MarqueeAnimation = (width) => css`
+  animation-name: ${MarqueeFrame(width)};
+  animation-duration: ${parseInt(width / 70)}s;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   animation-fill-mode: both;
-  -webkit-animation-name: ${MarqueeFrame};
-  -webkit-animation-duration: 20s;
+  -webkit-animation-name: ${MarqueeFrame(width)};
+  -webkit-animation-duration: ${parseInt(width / 70)}s;
   -webkit-animation-timing-function: linear;
   -webkit-animation-iteration-count: infinite;
   -webkit-animation-fill-mode: both;
@@ -123,12 +133,12 @@ const Comment = styled.div`
   div {
     font-family: Mont;
     color: white;
-    min-width: 100%;
+    /* min-width: 100%; */
     width: max-content;
     white-space: nowrap;
     display: flex;
     align-items: center;
-    ${MarqueeAnimation};
+    ${(props) => MarqueeAnimation(props.width)};
   }
 `;
 
@@ -169,14 +179,36 @@ const LineupItem = styled.div`
   font-family: "Varietee";
 `;
 
+const getTextWidth = (txt, font) => {
+  const element = document.createElement("canvas");
+  const context = element.getContext("2d");
+  context.font = font;
+  return context.measureText(txt).width;
+};
+
 const Stage = ({ history, match }) => {
   const {
     params: { stage },
   } = match;
 
   const image = stage === "red" ? StageRed : StageBlue;
-  const x = parseInt(Math.random() * 100);
-  const y = parseInt(Math.random() * 100);
+  const [x, setX] = useState(parseInt(Math.random() * 100));
+  const [y, setY] = useState(parseInt(Math.random() * 100));
+
+  const [comments, setComments] = useState(PLAY_DUMMY[stage].comment);
+  const [marqueeValue, setMarqueeValue] = useState(0);
+  const [comIdx, setComIdx] = useState(0);
+
+  useEffect(() => {
+    const w = comments.map(
+      (comment) =>
+        parseInt(getTextWidth(comment, "Mont, 16px") * 2) + window.innerWidth
+    );
+    setMarqueeValue(w);
+    console.log(w);
+  }, [comments]);
+
+  const comRef = useRef();
 
   const getYoutubeIframe = (video_id) => {
     return {
@@ -205,8 +237,15 @@ const Stage = ({ history, match }) => {
         <Artist>
           <div>{PLAY_DUMMY[stage].artist}</div>
         </Artist>
-        <Comment>
-          <div>{PLAY_DUMMY[stage].comment}</div>
+        <Comment width={marqueeValue[comIdx]}>
+          <div
+            ref={comRef}
+            onAnimationIteration={() => {
+              setComIdx((v) => (v + 1) % 10);
+            }}
+          >
+            {comments[comIdx]}
+          </div>
         </Comment>
       </Video>
       <Lineup stage={stage} image={image} x={x} y={y}>
