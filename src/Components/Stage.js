@@ -153,6 +153,49 @@ const Comment = styled.div`
   }
 `;
 
+const WaveFrame = (x, y) => keyframes`
+  0%{
+    background-position-x: ${x}%;
+    background-position-y: ${y}%;
+  }
+  12.5%{
+    background-position-x: ${x + Math.random() * 8 - 4}%;
+    background-position-y: ${y + Math.random() * 8 - 4}%;
+  }
+  25%{
+    background-position-x: ${x + Math.random() * 8 - 4}%;
+    background-position-y: ${y}%;
+  }
+  37.5%{
+    background-position-x: ${x + Math.random() * 8 - 4}%;
+    background-position-y: ${y + Math.random() * 8 - 4}%;
+  }
+  50%{
+    background-position-x: ${x}%;
+    background-position-y: ${y + Math.random() * 8 - 4}%;
+  }
+  62.5%{
+    background-position-x: ${x + Math.random() * 8 - 4}%;
+    background-position-y: ${y + Math.random() * 8 - 4}%;
+  }
+  75%{
+    background-position-x: ${x + Math.random() * 8 - 4}%;
+    background-position-y: ${y}%;
+  }
+  87.5%{
+    background-position-x: ${x + Math.random() * 8 - 4}%;
+    background-position-y: ${y + Math.random() * 8 - 4}%;
+  }
+  100%{
+    background-position-x: ${x}%;
+    background-position-y: ${y}%;
+  }
+`;
+
+const WaveAnimation = (x, y) => css`
+  animation: ${WaveFrame(x, y)} ${Math.random() * 3 + 8}s linear infinite;
+`;
+
 const Lineup = styled.div`
   width: 100%;
   height: 50%;
@@ -161,6 +204,7 @@ const Lineup = styled.div`
   background-position-x: ${(props) => props.x}%;
   background-position-y: ${(props) => props.y}%;
   padding: 1rem;
+  ${(props) => WaveAnimation(props.x, props.y)};
 `;
 
 const LineupWrapper = styled.div`
@@ -203,8 +247,14 @@ const Stage = ({ history, match }) => {
   } = match;
 
   const image = stage === "red" ? StageRed : StageBlue;
-  const [x, setX] = useState(parseInt(Math.random() * 100));
-  const [y, setY] = useState(parseInt(Math.random() * 100));
+  const [x, setX] = useState(parseInt(Math.random() * 90 + 5));
+  const [y, setY] = useState(parseInt(Math.random() * 90 + 5));
+
+  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [isPortrait, setIsPortrait] = useState(
+    window.innerHeight > window.innerWidth
+  );
 
   const [comments, setComments] = useState(PLAY_DUMMY[stage].comment);
   const [marqueeValue, setMarqueeValue] = useState(0);
@@ -213,13 +263,26 @@ const Stage = ({ history, match }) => {
   useEffect(() => {
     setComments(PLAY_DUMMY[stage].comment);
   }, [stage]);
+
   useEffect(() => {
     const w = comments.map(
       (comment) =>
-        parseInt(getTextWidth(comment, "Mont, 16px") * 2) + window.innerWidth
+        parseInt(getTextWidth(comment, "Mont, 16px") * 2) + windowWidth
     );
     setMarqueeValue(w);
-  }, [comments]);
+  }, [comments, windowWidth]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowHeight(window.innerHeight);
+      setWindowWidth(window.innerWidth);
+      setIsPortrait(window.innerHeight > window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const comRef = useRef();
 
@@ -237,7 +300,7 @@ const Stage = ({ history, match }) => {
   };
 
   return (
-    <Wrapper stage={stage} height={window.innerHeight}>
+    <Wrapper stage={stage} height={windowHeight}>
       <Video>
         <YoutubeWrapper>
           <YouTube
@@ -261,15 +324,17 @@ const Stage = ({ history, match }) => {
           </div>
         </Comment>
       </Video>
-      <Lineup stage={stage} image={image} x={x} y={y}>
-        <LineupWrapper stage={stage}>
-          {LINEUP[stage].map((artist, idx) => (
-            <LineupItem key={idx} stage={stage}>
-              {artist}
-            </LineupItem>
-          ))}
-        </LineupWrapper>
-      </Lineup>
+      {isPortrait && (
+        <Lineup stage={stage} image={image} x={x} y={y}>
+          <LineupWrapper stage={stage}>
+            {LINEUP[stage].map((artist, idx) => (
+              <LineupItem key={idx} stage={stage}>
+                {artist}
+              </LineupItem>
+            ))}
+          </LineupWrapper>
+        </Lineup>
+      )}
     </Wrapper>
   );
 };
