@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "45ed0ca855df4b723898f46fe18fae22",
+    "revision": "6f98c6248f1f7854e03017b72412cbc2",
     "url": "/always-festival/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/always-festival/static/css/2.e6808bd0.chunk.css"
   },
   {
-    "revision": "46ccedce847144caf37c",
+    "revision": "d2ecc8d3670bfe5fbfea",
     "url": "/always-festival/static/css/main.d09a118a.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/always-festival/static/js/2.f46797b9.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "46ccedce847144caf37c",
-    "url": "/always-festival/static/js/main.9fd9587d.chunk.js"
+    "revision": "d2ecc8d3670bfe5fbfea",
+    "url": "/always-festival/static/js/main.3a188113.chunk.js"
   },
   {
     "revision": "0677c53772bb8e437985",
