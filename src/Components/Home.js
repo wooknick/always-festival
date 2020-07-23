@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import Entrance from "./Entrance";
-import { Link } from "react-router-dom";
-import { useMediaQuery } from "react-responsive";
 
 const Wrapper = styled.div`
   padding-top: 3.5rem;
@@ -16,7 +14,6 @@ const Wrapper = styled.div`
 
 const Home = () => {
   // const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
-
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [isPortrait, setIsPortrait] = useState(

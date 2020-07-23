@@ -82,6 +82,8 @@ const Wrapper = styled.div`
   text-transform: uppercase;
   font-family: DiscoDiva;
   -webkit-text-stroke: 2px;
+  text-align: center;
+  line-height: 1.4em;
 
   @media screen and (min-width: 768px) {
     font-size: 2.5rem;

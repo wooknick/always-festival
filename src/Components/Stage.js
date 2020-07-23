@@ -1,7 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
 import styled, { keyframes, css } from "styled-components";
-import BounceArrow from "../Images/BounceArrow.png";
-import { Textfit } from "react-textfit";
 import YouTube from "@u-wave/react-youtube"; // for youtube api
 import { useMediaQuery } from "react-responsive";
 import StageBlue from "../Images/StageBlue.png";
@@ -245,20 +243,17 @@ const Stage = ({ history, match }) => {
   const {
     params: { stage },
   } = match;
-
   const image = stage === "red" ? StageRed : StageBlue;
+
   const [x, setX] = useState(parseInt(Math.random() * 90 + 5));
   const [y, setY] = useState(parseInt(Math.random() * 90 + 5));
-
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [isPortrait, setIsPortrait] = useState(
-    window.innerHeight > window.innerWidth
-  );
-
   const [comments, setComments] = useState(PLAY_DUMMY[stage].comment);
   const [marqueeValue, setMarqueeValue] = useState(0);
   const [comIdx, setComIdx] = useState(0);
+  const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
+  const t = useRef();
 
   useEffect(() => {
     setComments(PLAY_DUMMY[stage].comment);
@@ -274,17 +269,17 @@ const Stage = ({ history, match }) => {
 
   useEffect(() => {
     const handleResize = () => {
-      setWindowHeight(window.innerHeight);
-      setWindowWidth(window.innerWidth);
-      setIsPortrait(window.innerHeight > window.innerWidth);
+      clearTimeout(t.current);
+      t.current = setTimeout(() => {
+        setWindowHeight(window.innerHeight);
+        setWindowWidth(window.innerWidth);
+      }, 200);
     };
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-  const comRef = useRef();
 
   const getYoutubeIframe = (video_id) => {
     return {
@@ -302,7 +297,9 @@ const Stage = ({ history, match }) => {
   return (
     <Wrapper stage={stage} height={windowHeight}>
       <Video>
-        <YoutubeWrapper>
+        <YoutubeWrapper
+        // dangerouslySetInnerHTML={getYoutubeIframe(PLAY_DUMMY[stage].id)}
+        >
           <YouTube
             width="100%"
             height="100%"
@@ -315,7 +312,6 @@ const Stage = ({ history, match }) => {
         </Artist>
         <Comment width={marqueeValue[comIdx]}>
           <div
-            ref={comRef}
             onAnimationIteration={() => {
               setComIdx((v) => (v + 1) % 10);
             }}
