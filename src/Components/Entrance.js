@@ -8,47 +8,38 @@ const WaveFrame = (x, y) => keyframes`
   0%{
     background-position-x: ${x}%;
     background-position-y: ${y}%;
-    background-size: 250%;
   }
   12.5%{
     background-position-x: ${x + Math.random() * 8 - 4}%;
     background-position-y: ${y + Math.random() * 8 - 4}%;
-    background-size: ${Math.random() * 6 + 247}%;
   }
   25%{
     background-position-x: ${x + Math.random() * 8 - 4}%;
     background-position-y: ${y}%;
-    background-size: ${Math.random() * 6 + 247}%;
   }
   37.5%{
     background-position-x: ${x + Math.random() * 8 - 4}%;
     background-position-y: ${y + Math.random() * 8 - 4}%;
-    background-size: ${Math.random() * 6 + 247}%;
   }
   50%{
     background-position-x: ${x}%;
     background-position-y: ${y + Math.random() * 8 - 4}%;
-    background-size: ${Math.random() * 6 + 247}%;
   }
   62.5%{
     background-position-x: ${x + Math.random() * 8 - 4}%;
     background-position-y: ${y + Math.random() * 8 - 4}%;
-    background-size: ${Math.random() * 6 + 247}%;
   }
   75%{
     background-position-x: ${x + Math.random() * 8 - 4}%;
     background-position-y: ${y}%;
-    background-size: ${Math.random() * 6 + 247}%;
   }
   87.5%{
     background-position-x: ${x + Math.random() * 8 - 4}%;
     background-position-y: ${y + Math.random() * 8 - 4}%;
-    background-size: ${Math.random() * 6 + 247}%;
   }
   100%{
     background-position-x: ${x}%;
     background-position-y: ${y}%;
-    background-size: 250%;
   }
 `;
 
