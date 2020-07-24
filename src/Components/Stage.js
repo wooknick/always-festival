@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import styled, { keyframes, css } from "styled-components";
 import YouTube from "@u-wave/react-youtube"; // for youtube api
 import { useMediaQuery } from "react-responsive";
+import { getAvailableVideo } from "../util";
 import StageBlue from "../Images/StageBlue.png";
 import StageRed from "../Images/StageRed.png";
 
@@ -34,7 +35,7 @@ const LINEUP = {
 
 const PLAY_DUMMY = {
   blue: {
-    id: "SqdE10H4ZCk",
+    id: ["aed3lLLSUHk", "SqdE10H4ZCk"],
     artist: "BEYONCE",
     comment: [
       `Beyoncé DID THAT!!! She’s the only artist in this generation that knows how to put on a show. The greatest performer of all time.`,
@@ -50,7 +51,7 @@ const PLAY_DUMMY = {
     ],
   },
   red: {
-    id: "lpKE6yBw2Os",
+    id: ["lpKE6yBw2Os"],
     artist: "BILLIE EILISH",
     comment: [
       "Billie got a sprained ankle but she still rocking that brace",
@@ -245,6 +246,7 @@ const Stage = ({ history, match }) => {
   } = match;
   const image = stage === "red" ? StageRed : StageBlue;
 
+  const [videos, setVideos] = useState([]);
   const [x, setX] = useState(parseInt(Math.random() * 90 + 5));
   const [y, setY] = useState(parseInt(Math.random() * 90 + 5));
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
@@ -254,6 +256,18 @@ const Stage = ({ history, match }) => {
   const [comIdx, setComIdx] = useState(0);
   const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
   const t = useRef();
+
+  useEffect(() => {
+    const getVideos = async (raw_videos) => {
+      const available_videos = await getAvailableVideo(raw_videos);
+      if (available_videos.length === 0) {
+        setVideos(["B6fhtHptMnI"]); // should be never broken
+      } else {
+        setVideos(available_videos);
+      }
+    };
+    getVideos(PLAY_DUMMY[stage].id);
+  }, [stage]);
 
   useEffect(() => {
     setComments(PLAY_DUMMY[stage].comment);
@@ -303,7 +317,7 @@ const Stage = ({ history, match }) => {
           <YouTube
             width="100%"
             height="100%"
-            video={PLAY_DUMMY[stage].id}
+            video={videos[0]}
             playsInline={true}
           />
         </YoutubeWrapper>

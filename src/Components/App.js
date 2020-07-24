@@ -1,3 +1,4 @@
+import dotenv from "dotenv";
 import React from "react";
 import GlobalStyles from "../Styles/GlobalStyles";
 import Theme from "../Styles/Theme";
@@ -15,6 +16,7 @@ import Stage from "./Stage";
 import "./fonts/DiscoDiva/font.css";
 import "./fonts/Retrock/font.css";
 import "./fonts/Variete/font.css";
+dotenv.config();
 
 const Landscape = styled.div`
   @media screen and (max-height: 475px) {
@@ -41,6 +43,7 @@ const Landscape = styled.div`
 `;
 
 const App = () => {
+  console.log(process.env.REACT_APP_YOUTUBE_API_KEY);
   return (
     <ThemeProvider theme={Theme}>
       <>
