@@ -8,7 +8,9 @@ export const getAvailableVideo = async (video_ids) => {
       params: {
         part: "id",
         id: video_ids.join(","),
-        key: process.env.REACT_APP_YOUTUBE_API_KEY,
+        key:
+          process.env.REACT_APP_YOUTUBE_API_KEY ||
+          "AIzaSyDoTorqMsD8ldjOt14uNPt6dFqN3mtCL-g",
       },
     });
     const ret = items.map((item) => item["id"]);
