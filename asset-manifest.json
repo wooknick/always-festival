@@ -1,19 +1,19 @@
 {
   "files": {
     "main.css": "/always-festival/static/css/main.d09a118a.chunk.css",
-    "main.js": "/always-festival/static/js/main.9f5b408f.chunk.js",
-    "main.js.map": "/always-festival/static/js/main.9f5b408f.chunk.js.map",
+    "main.js": "/always-festival/static/js/main.f88d0a0b.chunk.js",
+    "main.js.map": "/always-festival/static/js/main.f88d0a0b.chunk.js.map",
     "runtime-main.js": "/always-festival/static/js/runtime-main.58563d44.js",
     "runtime-main.js.map": "/always-festival/static/js/runtime-main.58563d44.js.map",
     "static/css/2.e6808bd0.chunk.css": "/always-festival/static/css/2.e6808bd0.chunk.css",
-    "static/js/2.f04b01ad.chunk.js": "/always-festival/static/js/2.f04b01ad.chunk.js",
-    "static/js/2.f04b01ad.chunk.js.map": "/always-festival/static/js/2.f04b01ad.chunk.js.map",
+    "static/js/2.75d90c56.chunk.js": "/always-festival/static/js/2.75d90c56.chunk.js",
+    "static/js/2.75d90c56.chunk.js.map": "/always-festival/static/js/2.75d90c56.chunk.js.map",
     "index.html": "/always-festival/index.html",
-    "precache-manifest.4a0ab455bb09f7d154c36b9c552ad35a.js": "/always-festival/precache-manifest.4a0ab455bb09f7d154c36b9c552ad35a.js",
+    "precache-manifest.79f647ddff24d7bea531fea345c3afb3.js": "/always-festival/precache-manifest.79f647ddff24d7bea531fea345c3afb3.js",
     "service-worker.js": "/always-festival/service-worker.js",
     "static/css/2.e6808bd0.chunk.css.map": "/always-festival/static/css/2.e6808bd0.chunk.css.map",
     "static/css/main.d09a118a.chunk.css.map": "/always-festival/static/css/main.d09a118a.chunk.css.map",
-    "static/js/2.f04b01ad.chunk.js.LICENSE.txt": "/always-festival/static/js/2.f04b01ad.chunk.js.LICENSE.txt",
+    "static/js/2.75d90c56.chunk.js.LICENSE.txt": "/always-festival/static/js/2.75d90c56.chunk.js.LICENSE.txt",
     "static/media/font.css": "/always-festival/static/media/Varietee.ae5889f3.svg",
     "static/media/StageBlue.png": "/always-festival/static/media/StageBlue.0fd02035.png",
     "static/media/StageRed.png": "/always-festival/static/media/StageRed.09d1cf83.png"
@@ -21,8 +21,8 @@
   "entrypoints": [
     "static/js/runtime-main.58563d44.js",
     "static/css/2.e6808bd0.chunk.css",
-    "static/js/2.f04b01ad.chunk.js",
+    "static/js/2.75d90c56.chunk.js",
     "static/css/main.d09a118a.chunk.css",
-    "static/js/main.9f5b408f.chunk.js"
+    "static/js/main.f88d0a0b.chunk.js"
   ]
 }
