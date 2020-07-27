@@ -1,3 +1,4 @@
+import dotenv from "dotenv";
 import React from "react";
 import GlobalStyles from "../Styles/GlobalStyles";
 import Theme from "../Styles/Theme";
@@ -10,10 +11,12 @@ import {
 } from "react-router-dom";
 import Home from "./Home";
 import Header from "./Header";
+import Stage from "./Stage";
 
 import "./fonts/DiscoDiva/font.css";
 import "./fonts/Retrock/font.css";
 import "./fonts/Variete/font.css";
+dotenv.config();
 
 const Landscape = styled.div`
   @media screen and (max-height: 475px) {
@@ -40,6 +43,7 @@ const Landscape = styled.div`
 `;
 
 const App = () => {
+  console.log(process.env.REACT_APP_YOUTUBE_API_KEY);
   return (
     <ThemeProvider theme={Theme}>
       <>
@@ -47,8 +51,10 @@ const App = () => {
         <Router>
           <>
             <Header />
+
             <Switch>
               <Route exact path="/" component={Home} />
+              <Route path="/stage/:stage" component={Stage} />
               <Redirect from="*" to="/" />
             </Switch>
           </>
