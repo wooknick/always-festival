@@ -21,28 +21,33 @@ const Wrapper = styled.div`
 `;
 
 const Video = styled.div`
-  height: 50%;
+  height: 55%;
   width: 100vw;
   flex: 1;
+  display: flex;
+  flex-direction: column;
 `;
 
 const YoutubeWrapper = styled.div`
   width: 100%;
-  height: 75%;
+  height: 70%;
+  flex: 1;
 `;
 
 const Artist = styled.div`
   width: 100%;
-  max-height: 50px;
-  height: 15%;
+  max-height: 4rem;
+  height: 20%;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0px 30px;
+  padding: 0px 0.4em;
   div {
     font-family: discoDiva;
     font-size: 1.2rem;
     color: white;
+    text-align: center;
+    line-height: 1.2em;
   }
 `;
 
@@ -72,7 +77,7 @@ const MarqueeAnimation = (width) => css`
 
 const Comment = styled.div`
   width: 100%;
-  max-height: 50px;
+  max-height: 45px;
   height: 10%;
   display: flex;
   align-items: center;
@@ -136,7 +141,7 @@ const WaveAnimation = (x, y) => css`
 
 const Lineup = styled.div`
   width: 100%;
-  height: 50%;
+  height: 45%;
   background-image: url(${(props) => props.image});
   background-size: 250%;
   background-position-x: ${(props) => props.x}%;
@@ -170,6 +175,7 @@ const LineupItem = styled.div`
   justify-content: center;
   align-items: center;
   font-family: "Varietee";
+  text-align: center;
   &:hover {
     cursor: pointer;
     color: white;
