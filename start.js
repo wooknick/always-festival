@@ -34,6 +34,10 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
+app.use((req, res, next) => {
+  res.setHeader("Set-Cookie", "Samesite=None; Secure;");
+  next();
+});
 
 app.use(express.static(path.join(__dirname, "build")));
 app.get("/api/artists/:stage", wrap(getArtists));

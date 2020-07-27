@@ -284,7 +284,8 @@ const Stage = ({ history, match }) => {
       type="text/html"
       width="100%"
       height="100%"
-      src="https://www.youtube.com/embed/${video_id}?autoplay=1&playsinline=1"
+      http://www.youtube.com/embed/M7lc1UVf-VE?enablejsapi=1&origin=http://example.com
+      src="https://www.youtube.com/embed/${video_id}?autoplay=1&playsinline=1&origin=http://alwaysfestival.com"
       frameborder="0"
      />`,
     };
