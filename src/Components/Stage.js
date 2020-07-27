@@ -2,71 +2,10 @@ import React, { useRef, useState, useEffect } from "react";
 import styled, { keyframes, css } from "styled-components";
 import YouTube from "@u-wave/react-youtube"; // for youtube api
 import { useMediaQuery } from "react-responsive";
+import axios from "axios";
 import { getAvailableVideo } from "../util";
 import StageBlue from "../Images/StageBlue.png";
 import StageRed from "../Images/StageRed.png";
-
-const LINEUP = {
-  blue: [
-    "BTS 34:50",
-    "WEEKEND 6:20",
-    "BEYONCE 58:40",
-    "Pink Floyd 34:50",
-    "IMAGINE DRAGONS 57:32",
-    "1975 48:59",
-    "Carpenters 42:11",
-    "Queen 17:32",
-    "Prince 29:43",
-    "Whitney Houston 84:14",
-  ],
-  red: [
-    "BILLIE EILISH 34:23",
-    "David Bowie 6:20",
-    "Bob Marley 58:40",
-    "Bob Dylan 34:23",
-    "Beatles 57:32",
-    "Rolling Stones 48:59",
-    "The Who 42:11",
-    "Amy Winehouse 17:32",
-    "jamiroquai 29:43",
-    "Coldplay 84:14",
-  ],
-};
-
-const PLAY_DUMMY = {
-  blue: {
-    id: ["aed3lLLSUHk", "SqdE10H4ZCk"],
-    artist: "BEYONCE",
-    comment: [
-      `Beyoncé DID THAT!!! She’s the only artist in this generation that knows how to put on a show. The greatest performer of all time.`,
-      `It’s crazy.`, // 70, 11 = 6.3
-      `She is so unbelievably beautiful.`, // 255, 33 = 7.72
-      `Beyoncé is the best performer I’ve ever seen`, // 354, 44 = 8
-      `Beyoncé deserves every bit of screaming when she gets on that stage`,
-      `Legend`,
-      `She is beautifully awesome .`,
-      `great entertainer even better than michael Jackson`,
-      `I cried when she sang I will always love you`,
-      `Beautiful..just beautiful..`, // 187, 27 = 6.92
-    ],
-  },
-  red: {
-    id: ["lpKE6yBw2Os"],
-    artist: "BILLIE EILISH",
-    comment: [
-      "Billie got a sprained ankle but she still rocking that brace",
-      "shes dead ass jumping and dancing on a broke. leg wtf queen",
-      "I love how she is so natural. She is so comfortable just being herself. You don't see that much anymore.",
-      "i like how she can sing so well even when shes out of breath its amazinggg",
-      "No one ever talks about how good that drummer is doing",
-      "her brother is a gold, she is really lucky to has brother like him",
-      "I'M A BAD GUY DUUUH OOOOOOOOOOOOOOOOOOOOOWWWW LOVE",
-      "i love how she can jump so high even with a boot on",
-      "This drummer (Andrew) is honestly amazing",
-      "her eyes matches her hair, I love it ",
-    ],
-  },
-};
 
 const Wrapper = styled.div`
   padding-top: 3.5rem;
@@ -231,6 +170,14 @@ const LineupItem = styled.div`
   justify-content: center;
   align-items: center;
   font-family: "Varietee";
+  &:hover {
+    cursor: pointer;
+    color: white;
+    background-color: ${(props) =>
+      props.stage === "red"
+        ? props.theme.color.mainRed
+        : props.theme.color.mainBlue};
+  }
 `;
 
 const getTextWidth = (txt, font) => {
@@ -246,40 +193,75 @@ const Stage = ({ history, match }) => {
   } = match;
   const image = stage === "red" ? StageRed : StageBlue;
 
+  const [data, setData] = useState([]);
+  const [onStage, setOnStage] = useState({});
+  const [loading, setLoading] = useState(true);
+
   const [videos, setVideos] = useState([]);
+  const [comments, setComments] = useState([]);
+
+  const [comIdx, setComIdx] = useState(0);
+  const [marqueeValue, setMarqueeValue] = useState(0);
+
   const [x, setX] = useState(parseInt(Math.random() * 90 + 5));
   const [y, setY] = useState(parseInt(Math.random() * 90 + 5));
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [comments, setComments] = useState(PLAY_DUMMY[stage].comment);
-  const [marqueeValue, setMarqueeValue] = useState(0);
-  const [comIdx, setComIdx] = useState(0);
   const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
   const t = useRef();
+
+  useEffect(() => {
+    setLoading(true);
+    axios({
+      method: "get",
+      url: `/api/artists/${stage}`,
+      responseType: "json",
+    }).then((res) => {
+      setData(res.data);
+      setOnStage(res.data[0]);
+      setLoading(false);
+    });
+  }, [stage]);
 
   useEffect(() => {
     const getVideos = async (raw_videos) => {
       const available_videos = await getAvailableVideo(raw_videos);
       if (available_videos.length === 0) {
-        setVideos(["B6fhtHptMnI"]); // should be never broken
+        setVideos([{ id: "B6fhtHptMnI", comments: [""] }]); // should be never broken
       } else {
         setVideos(available_videos);
       }
     };
-    getVideos(PLAY_DUMMY[stage].id);
-  }, [stage]);
+    if (!loading) {
+      getVideos(onStage.videos);
+    }
+  }, [loading, onStage]);
 
   useEffect(() => {
-    setComments(PLAY_DUMMY[stage].comment);
-  }, [stage]);
+    if (!loading) {
+      if (
+        videos &&
+        videos[0] &&
+        videos[0].comments &&
+        videos[0].comments.length > 0
+      ) {
+        setComments(videos[0].comments);
+      } else {
+        setComments([""]);
+      }
+    }
+  }, [loading, videos]);
 
   useEffect(() => {
-    const w = comments.map(
-      (comment) =>
-        parseInt(getTextWidth(comment, "Mont, 16px") * 2) + windowWidth
-    );
-    setMarqueeValue(w);
-  }, [comments, windowWidth]);
+    if (!loading) {
+      const w = comments.map(
+        (comment) =>
+          parseInt(getTextWidth(comment, "Mont, 16px") * 2) + windowWidth
+      );
+      setMarqueeValue(w);
+      setComIdx(0);
+    }
+  }, [comments, loading, windowWidth]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -308,38 +290,51 @@ const Stage = ({ history, match }) => {
     };
   };
 
+  const handleLineupClick = (id) => {
+    const nextArtist = data.find((i) => i._id === id);
+    setOnStage(nextArtist);
+  };
+
   return (
     <Wrapper stage={stage} height={windowHeight}>
-      <Video>
-        <YoutubeWrapper
-        // dangerouslySetInnerHTML={getYoutubeIframe(PLAY_DUMMY[stage].id)}
-        >
-          <YouTube
-            width="100%"
-            height="100%"
-            video={videos[0]}
-            playsInline={true}
-          />
-        </YoutubeWrapper>
-        <Artist>
-          <div>{PLAY_DUMMY[stage].artist}</div>
-        </Artist>
-        <Comment width={marqueeValue[comIdx]}>
-          <div
-            onAnimationIteration={() => {
-              setComIdx((v) => (v + 1) % 10);
-            }}
+      {!loading && (
+        <Video>
+          <YoutubeWrapper
+          // dangerouslySetInnerHTML={getYoutubeIframe(PLAY_DUMMY[stage].id)}
           >
-            {comments[comIdx]}
-          </div>
-        </Comment>
-      </Video>
-      {isPortrait && (
+            <YouTube
+              width="100%"
+              height="100%"
+              video={videos[0] && videos[0].id}
+              playsInline={true}
+            />
+          </YoutubeWrapper>
+          <Artist>
+            <div>{onStage.artist}</div>
+          </Artist>
+          <Comment width={marqueeValue[comIdx]}>
+            <div
+              onAnimationIteration={() => {
+                setComIdx((v) => (v + 1) % comments.length);
+              }}
+            >
+              {comments[comIdx]}
+            </div>
+          </Comment>
+        </Video>
+      )}
+      {!loading && isPortrait && (
         <Lineup stage={stage} image={image} x={x} y={y}>
           <LineupWrapper stage={stage}>
-            {LINEUP[stage].map((artist, idx) => (
-              <LineupItem key={idx} stage={stage}>
-                {artist}
+            {data.map((artist, idx) => (
+              <LineupItem
+                key={idx}
+                stage={stage}
+                onClick={() => {
+                  handleLineupClick(artist._id);
+                }}
+              >
+                {artist.artist}
               </LineupItem>
             ))}
           </LineupWrapper>

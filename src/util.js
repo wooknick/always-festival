@@ -1,7 +1,8 @@
 import axios from "axios";
 
-export const getAvailableVideo = async (video_ids) => {
+export const getAvailableVideo = async (videos) => {
   try {
+    const video_ids = videos.map((video) => video.id);
     const {
       data: { items },
     } = await axios.get("https://www.googleapis.com/youtube/v3/videos", {
@@ -13,7 +14,11 @@ export const getAvailableVideo = async (video_ids) => {
           "AIzaSyDoTorqMsD8ldjOt14uNPt6dFqN3mtCL-g",
       },
     });
-    const ret = items.map((item) => item["id"]);
+    // const ret = items.map((item) => item["id"]);
+    const available_ids = items.map((item) => item["id"]);
+    const ret = videos
+      .filter((video) => available_ids.includes(video.id))
+      .sort(() => Math.random() - Math.random());
     return ret;
   } catch (e) {
     console.error(e);
