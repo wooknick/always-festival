@@ -239,7 +239,8 @@ const Stage = ({ history, match }) => {
       }
     };
     if (!loading) {
-      getVideos(onStage.videos);
+      setVideos(onStage.videos);
+      // getVideos(onStage.videos);
     }
   }, [loading, onStage]);
 
