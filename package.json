@@ -27,13 +27,14 @@
     "styled-reset": "^4.1.6"
   },
   "scripts": {
-    "dev": "react-scripts start",
+    "predev": "npm run build",
+    "dev": "npm run start",
+    "devReact": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "prestart": "npm run build",
     "start": "node start.js"
   },
   "eslintConfig": {
