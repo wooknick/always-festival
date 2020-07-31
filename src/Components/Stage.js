@@ -239,7 +239,7 @@ const Stage = ({ history, match }) => {
       }
     };
     if (!loading) {
-      setVideos(onStage.videos);
+      setVideos(onStage.videos.sort(() => Math.random() - Math.random()));
       // getVideos(onStage.videos);
     }
   }, [loading, onStage]);
