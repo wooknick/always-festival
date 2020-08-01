@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { useState } from "react";
 
 const Header = styled.header`
@@ -30,7 +30,6 @@ const Menu = styled.div`
     transform: rotateZ(90deg);
     min-width: 32px;
     width: max-content;
-    /* margin: 0 auto; */
     color: ${(props) =>
       props.stage === "red"
         ? props.theme.color.mainRed
@@ -42,7 +41,6 @@ const Menu = styled.div`
 
   div.stage {
     width: max-content;
-    /* margin: 0 auto; */
     margin-left: 0.7em;
     font-family: Varietee;
     padding-top: 0.2em;
