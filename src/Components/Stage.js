@@ -96,47 +96,56 @@ const Comment = styled.div`
   }
 `;
 
+// const WaveFrame = (x, y) => keyframes`
+//   0%{
+//     background-position-x: ${x}%;
+//     background-position-y: ${y}%;
+//   }
+//   12.5%{
+//     background-position-x: ${x + Math.random() * 8 - 4}%;
+//     background-position-y: ${y + Math.random() * 8 - 4}%;
+//   }
+//   25%{
+//     background-position-x: ${x + Math.random() * 8 - 4}%;
+//     background-position-y: ${y}%;
+//   }
+//   37.5%{
+//     background-position-x: ${x + Math.random() * 8 - 4}%;
+//     background-position-y: ${y + Math.random() * 8 - 4}%;
+//   }
+//   50%{
+//     background-position-x: ${x}%;
+//     background-position-y: ${y + Math.random() * 8 - 4}%;
+//   }
+//   62.5%{
+//     background-position-x: ${x + Math.random() * 8 - 4}%;
+//     background-position-y: ${y + Math.random() * 8 - 4}%;
+//   }
+//   75%{
+//     background-position-x: ${x + Math.random() * 8 - 4}%;
+//     background-position-y: ${y}%;
+//   }
+//   87.5%{
+//     background-position-x: ${x + Math.random() * 8 - 4}%;
+//     background-position-y: ${y + Math.random() * 8 - 4}%;
+//   }
+//   100%{
+//     background-position-x: ${x}%;
+//     background-position-y: ${y}%;
+//   }
+// `;
+
 const WaveFrame = (x, y) => keyframes`
-  0%{
-    background-position-x: ${x}%;
-    background-position-y: ${y}%;
-  }
-  12.5%{
-    background-position-x: ${x + Math.random() * 8 - 4}%;
-    background-position-y: ${y + Math.random() * 8 - 4}%;
-  }
-  25%{
-    background-position-x: ${x + Math.random() * 8 - 4}%;
-    background-position-y: ${y}%;
-  }
-  37.5%{
-    background-position-x: ${x + Math.random() * 8 - 4}%;
-    background-position-y: ${y + Math.random() * 8 - 4}%;
-  }
-  50%{
-    background-position-x: ${x}%;
-    background-position-y: ${y + Math.random() * 8 - 4}%;
-  }
-  62.5%{
-    background-position-x: ${x + Math.random() * 8 - 4}%;
-    background-position-y: ${y + Math.random() * 8 - 4}%;
-  }
-  75%{
-    background-position-x: ${x + Math.random() * 8 - 4}%;
-    background-position-y: ${y}%;
-  }
-  87.5%{
-    background-position-x: ${x + Math.random() * 8 - 4}%;
-    background-position-y: ${y + Math.random() * 8 - 4}%;
-  }
-  100%{
-    background-position-x: ${x}%;
-    background-position-y: ${y}%;
-  }
+0%, 100%{
+  background-position-x: ${x - 4}%;
+}
+50%{
+  background-position-x: ${x + 4}%;
+}
 `;
 
 const WaveAnimation = (x, y) => css`
-  animation: ${WaveFrame(x, y)} ${Math.random() * 3 + 8}s linear infinite;
+  animation: ${WaveFrame(x, y)} ${Math.random() * 3 + 12}s linear infinite;
 `;
 
 const Lineup = styled.div`
@@ -209,8 +218,8 @@ const Stage = ({ history, match }) => {
   const [comIdx, setComIdx] = useState(0);
   const [marqueeValue, setMarqueeValue] = useState(0);
 
-  const [x, setX] = useState(parseInt(Math.random() * 90 + 5));
-  const [y, setY] = useState(parseInt(Math.random() * 90 + 5));
+  const [x, setX] = useState(parseInt(Math.random() * 70 + 5));
+  const [y, setY] = useState(parseInt(Math.random() * 70 + 5));
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
