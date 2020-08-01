@@ -145,7 +145,7 @@ const WaveFrame = (x, y) => keyframes`
 `;
 
 const WaveAnimation = (x, y) => css`
-  animation: ${WaveFrame(x, y)} ${Math.random() * 3 + 12}s linear infinite;
+  animation: ${WaveFrame(x, y)} 16s linear infinite;
 `;
 
 const Lineup = styled.div`
