@@ -35,6 +35,18 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
+app.get("*", (req, res, next) => {
+  let protocol = req.headers["x-forwarded-proto"] || req.protocol;
+  if (protocol === "https") {
+    next();
+  } else {
+    let from = `${protocol}://${req.hostname}${req.url}`;
+    let to = `https://'${req.hostname}${req.url}`;
+    console.log(`[${req.method}]: ${from} -> ${to}`);
+    res.redirect(to);
+  }
+});
+
 app.use(express.static(path.join(__dirname, "build")));
 app.get("/api/artists/:stage", wrap(getArtists));
 app.get("/*", (req, res) => {
