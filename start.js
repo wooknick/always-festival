@@ -92,7 +92,8 @@ const getArtists = async (req, res) => {
     if (!artists) {
       return res.status(404).json({ error: "artists not found" });
     }
-    res.json(artists);
+    const ret = artists.sort(() => Math.random() - Math.random()).slice(0, 6);
+    res.json(ret);
   });
 };
 
