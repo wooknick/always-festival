@@ -18,12 +18,17 @@ const Header = styled.header`
 
 const Menu = styled.div`
   font-size: 2rem;
-  flex: 0.1;
+  flex: ${(props) => (props.isHome ? 0.15 : 0.3)};
   display: flex;
   justify-content: flex-start;
+  align-items: center;
   margin-left: 0.3em;
-  div {
+  div:first-child {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     transform: rotateZ(90deg);
+    min-width: 32px;
     width: max-content;
     /* margin: 0 auto; */
     color: ${(props) =>
@@ -32,6 +37,23 @@ const Menu = styled.div`
         : props.theme.color.mainBlue};
     &:hover {
       cursor: pointer;
+    }
+  }
+
+  div.stage {
+    width: max-content;
+    /* margin: 0 auto; */
+    margin-left: 0.7em;
+    font-family: Varietee;
+    padding-top: 0.2em;
+    color: ${(props) =>
+      props.stage === "red"
+        ? props.theme.color.mainRed
+        : props.theme.color.mainBlue};
+    span:nth-child(1) {
+      &::after {
+        content: " ";
+      }
     }
   }
 `;
@@ -89,7 +111,7 @@ const SliderItem = styled.div`
 
 const Logo = styled.div`
   font-size: 1.8rem;
-  flex: 0.8;
+  flex: 0.7;
   div.main {
     width: max-content;
     margin: 0 auto;
@@ -103,22 +125,6 @@ const Logo = styled.div`
     }
     span:nth-child(2) {
       color: ${(props) => props.theme.color.mainRed};
-    }
-  }
-  div.stage {
-    width: max-content;
-    /* margin: 0 auto; */
-    margin-left: 0.5em;
-    font-family: Varietee;
-    padding-top: 0.2em;
-    color: ${(props) =>
-      props.stage === "red"
-        ? props.theme.color.mainRed
-        : props.theme.color.mainBlue};
-    span:nth-child(1) {
-      &::after {
-        content: " ";
-      }
     }
   }
 `;
@@ -138,30 +144,41 @@ export default withRouter(({ history, match }) => {
 
   return (
     <>
-      <Header>
-        <Menu
-          stage={stage}
-          onClick={() => {
-            setIsSliderOpen(true);
-          }}
-        >
-          <div>|||</div>
-        </Menu>
-        <Logo stage={stage}>
-          {match.isExact && (
+      {match.isExact ? (
+        <Header>
+          <Menu
+            stage={stage}
+            isHome={match.isExact}
+            onClick={() => {
+              setIsSliderOpen(true);
+            }}
+          >
+            <div>|||</div>
+          </Menu>
+          <Logo stage={stage}>
             <div className="main">
               <span>Always</span>
               <span>Festival</span>
             </div>
-          )}
-          {!match.isExact && (
+          </Logo>
+        </Header>
+      ) : (
+        <Header>
+          <Menu
+            stage={stage}
+            isHome={match.isExact}
+            onClick={() => {
+              setIsSliderOpen(true);
+            }}
+          >
+            <div>|||</div>
             <div className="stage">
               <span>{stage}</span>
               <span>stage</span>
             </div>
-          )}
-        </Logo>
-      </Header>
+          </Menu>
+        </Header>
+      )}
       {isSliderOpen && (
         <Slider
           onClick={() => {
