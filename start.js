@@ -1,4 +1,8 @@
 require("dotenv").config();
+
+const cron = require("node-cron");
+cron.schedule("10 */6 * * *", checkDB);
+
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
@@ -6,6 +10,7 @@ const wrap = require("express-async-wrap");
 
 const mongoose = require("mongoose");
 const Artists = require("./artists");
+const axios = require("axios");
 
 const db = mongoose.connection;
 db.on("error", console.error);
@@ -16,6 +21,67 @@ mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+
+async function checkDB() {
+  console.log(`DB Check Start : ${new Date()}`);
+  try {
+    await Artists.find({}, (err, artists) => {
+      if (err) {
+        console.log(`find error on DB : ${err}`);
+        return;
+      }
+      if (!artists) {
+        console.log("There is no artists");
+        return;
+      } else {
+        artists.forEach(async (artist) => await checkArtist(artist));
+        console.log(`DB Check End : ${new Date()}`);
+      }
+    });
+  } catch (e) {
+    console.log(`find error on Server : ${e}`);
+  }
+}
+
+async function checkArtist(artist) {
+  const videoIds = artist.videos.map((video) => video.id);
+  try {
+    const {
+      data: { items },
+    } = await axios.get("https://www.googleapis.com/youtube/v3/videos", {
+      params: {
+        part: "id",
+        id: videoIds.join(","),
+        key: process.env.REACT_APP_YOUTUBE_API_KEY,
+      },
+    });
+    const availableIds = items.map((item) => item["id"]);
+    if (
+      JSON.stringify(videoIds.sort()) !== JSON.stringify(availableIds.sort())
+    ) {
+      const newVideos = artist.videos.filter((video) =>
+        availableIds.includes(video.id)
+      );
+      console.log(videoIds, "->", availableIds);
+      try {
+        await Artists.updateOne(
+          { _id: artist._id },
+          { $set: { videos: [...newVideos] } },
+          (err, res) => {
+            if (err) {
+              console.log(`update error on DB : ${err}`);
+              return;
+            }
+          }
+        );
+      } catch (e) {
+        console.log(`update error on Server : ${e}`);
+      }
+    }
+  } catch (e) {
+    console.log(`error on youtube data api : ${e}`);
+  }
+}
 
 const getArtists = async (req, res) => {
   const stage = req.params.stage;
@@ -37,7 +103,9 @@ app.use(cors());
 
 app.get("*", (req, res, next) => {
   let protocol = req.headers["x-forwarded-proto"] || req.protocol;
-  if (protocol === "https") {
+  if (req.hostname === "localhost") {
+    next();
+  } else if (protocol === "https") {
     next();
   } else {
     let from = `${protocol}://${req.hostname}${req.url}`;

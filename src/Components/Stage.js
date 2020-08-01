@@ -230,17 +230,12 @@ const Stage = ({ history, match }) => {
   }, [stage]);
 
   useEffect(() => {
-    const getVideos = async (raw_videos) => {
-      const available_videos = await getAvailableVideo(raw_videos);
-      if (available_videos.length === 0) {
-        setVideos([{ id: "B6fhtHptMnI", comments: [""] }]); // should be never broken
-      } else {
-        setVideos(available_videos);
-      }
-    };
     if (!loading) {
-      setVideos(onStage.videos.sort(() => Math.random() - Math.random()));
-      // getVideos(onStage.videos);
+      if (onStage.videos.length === 0) {
+        setVideos([{ id: "dZqbLlaRKKc", comments: [""] }]); // should be never broken
+      } else {
+        setVideos(onStage.videos.sort(() => Math.random() - Math.random()));
+      }
     }
   }, [loading, onStage]);
 
