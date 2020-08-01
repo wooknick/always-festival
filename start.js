@@ -41,7 +41,7 @@ app.get("*", (req, res, next) => {
     next();
   } else {
     let from = `${protocol}://${req.hostname}${req.url}`;
-    let to = `https://'${req.hostname}${req.url}`;
+    let to = `https://${req.hostname}${req.url}`;
     console.log(`[${req.method}]: ${from} -> ${to}`);
     res.redirect(to);
   }
