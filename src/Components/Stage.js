@@ -3,6 +3,7 @@ import styled, { keyframes, css } from "styled-components";
 import YouTube from "@u-wave/react-youtube"; // for youtube api
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
+import queryString from "query-string";
 import StageBlue from "../Images/StageBlue.png";
 import StageRed from "../Images/StageRed.png";
 
@@ -125,7 +126,7 @@ const LineupWrapper = styled.div`
   overflow-y: scroll;
   background-color: white;
   color: ${(props) =>
-    props.Stage === "red"
+    props.stage === "red"
       ? props.theme.color.mainRed
       : props.theme.color.mainBlue};
   text-transform: uppercase;
@@ -162,10 +163,11 @@ const getTextWidth = (txt, font) => {
   return context.measureText(txt).width;
 };
 
-const Stage = ({ history, match }) => {
+const Stage = ({ history, match, location }) => {
   const {
     params: { stage },
   } = match;
+  const query = queryString.parse(location.search);
   const image = stage === "red" ? StageRed : StageBlue;
 
   const [data, setData] = useState([]);
@@ -197,6 +199,15 @@ const Stage = ({ history, match }) => {
       setLoading(false);
     });
   }, [stage]);
+
+  useEffect(() => {
+    if (query.index) {
+      const nextIndex = Number(query.index);
+      if (0 <= nextIndex && nextIndex < data.length) {
+        setOnStage(data[nextIndex]);
+      }
+    }
+  }, [data, query]);
 
   useEffect(() => {
     if (!loading) {
@@ -250,6 +261,7 @@ const Stage = ({ history, match }) => {
 
   const handleLineupClick = (id) => {
     const nextArtist = data.find((i) => i._id === id);
+    history.push(`/stage/${stage}`);
     setOnStage(nextArtist);
   };
 

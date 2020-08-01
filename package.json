@@ -16,6 +16,7 @@
     "hover.css": "^2.3.2",
     "mongoose": "^5.9.25",
     "node-cron": "^2.0.3",
+    "query-string": "^6.13.1",
     "react": "^16.13.1",
     "react-burger-menu": "^2.7.0",
     "react-dom": "^16.13.1",

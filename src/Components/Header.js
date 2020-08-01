@@ -1,16 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { withRouter } from "react-router-dom";
-import { useState } from "react";
+import { useMediaQuery } from "react-responsive";
+import axios from "axios";
 
 const Header = styled.header`
   width: 100%;
   height: 3.5rem;
   border-bottom: 1px solid #f2f2f2;
   display: flex;
-  /* justify-content: center; */
+  justify-content: ${(props) =>
+    props.isHome ? "flex-start" : "space-between"};
   align-items: center;
-  padding: 0 1em;
+  padding-left: 1rem;
   position: fixed;
   top: 0;
   background-color: #fff;
@@ -127,23 +129,116 @@ const Logo = styled.div`
   }
 `;
 
+const Dropdown = styled.div`
+  font-size: 1.6rem;
+  width: 100%;
+  height: 100%;
+  flex: 0.4;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  div {
+    width: 16rem;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Varietee";
+    background-color: ${(props) =>
+      props.stage === "red"
+        ? props.theme.color.mainRed
+        : props.theme.color.mainBlue};
+    color: white;
+    text-transform: uppercase;
+    padding: 0 2em;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+`;
+
+const DropdownWrapper = styled.div`
+  position: fixed;
+  top: 3.5rem;
+  right: 0;
+  z-index: 10;
+  width: 16rem;
+  height: max-content;
+  max-height: 50vh;
+  overflow-y: scroll;
+  background-color: white;
+  color: ${(props) =>
+    props.stage === "red"
+      ? props.theme.color.mainRed
+      : props.theme.color.mainBlue};
+  text-transform: uppercase;
+  border: white 5px solid;
+`;
+
+const DropdownItem = styled.div`
+  width: 100%;
+  height: 3.2em;
+  font-size: 1.4rem;
+  color: ${(props) =>
+    props.stage === "red"
+      ? props.theme.color.mainRed
+      : props.theme.color.mainBlue};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Varietee";
+  text-align: center;
+  &:hover {
+    cursor: pointer;
+    color: white;
+    background-color: ${(props) =>
+      props.stage === "red"
+        ? props.theme.color.mainRed
+        : props.theme.color.mainBlue};
+  }
+`;
+
 export default withRouter(({ history, match }) => {
   const [isSliderOpen, setIsSliderOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  let stage = Math.random() > 0.5 ? "red" : "blue";
-  if (!match.isExact) {
-    stage = history.location.pathname.split("/").pop();
-  }
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [stage, setStage] = useState(Math.random() > 0.5 ? "red" : "blue");
+  const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
+
+  useEffect(() => {
+    if (!match.isExact) {
+      setStage(history.location.pathname.split("/").pop());
+    }
+  }, [history.location.pathname, match.isExact]);
+
+  useEffect(() => {
+    setLoading(true);
+    axios({
+      method: "get",
+      url: `/api/artists/${stage}`,
+      responseType: "json",
+    }).then((res) => {
+      setData(res.data);
+      setLoading(false);
+    });
+  }, [stage]);
 
   const moveTo = (to) => {
     history.push(to);
     setIsSliderOpen(false);
   };
 
+  const handleLineupClick = (id) => {
+    setIsDropdownOpen(false);
+    history.push(`/stage/${stage}?index=${id}`);
+  };
+
   return (
     <>
       {match.isExact ? (
-        <Header>
+        <Header isHome={match.isExact}>
           <Menu
             stage={stage}
             isHome={match.isExact}
@@ -161,12 +256,13 @@ export default withRouter(({ history, match }) => {
           </Logo>
         </Header>
       ) : (
-        <Header>
+        <Header isHome={match.isExact}>
           <Menu
             stage={stage}
             isHome={match.isExact}
             onClick={() => {
               setIsSliderOpen(true);
+              setIsDropdownOpen(false);
             }}
           >
             <div>|||</div>
@@ -175,7 +271,33 @@ export default withRouter(({ history, match }) => {
               <span>stage</span>
             </div>
           </Menu>
+          {!loading && !isPortrait && (
+            <Dropdown stage={stage}>
+              <div
+                onClick={() => {
+                  setIsDropdownOpen((v) => !v);
+                }}
+              >
+                lineup
+              </div>
+            </Dropdown>
+          )}
         </Header>
+      )}
+      {!loading && !isPortrait && isDropdownOpen && (
+        <DropdownWrapper stage={stage}>
+          {data.map((artist, idx) => (
+            <DropdownItem
+              key={idx}
+              stage={stage}
+              onClick={() => {
+                handleLineupClick(idx);
+              }}
+            >
+              {artist.artist}
+            </DropdownItem>
+          ))}
+        </DropdownWrapper>
       )}
       {isSliderOpen && (
         <Slider
