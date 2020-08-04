@@ -4,45 +4,6 @@ import { Link } from "react-router-dom";
 import StageBlue from "../Images/StageBlue.png";
 import StageRed from "../Images/StageRed.png";
 
-// const WaveFrame = (x, y) => keyframes`
-//   0%{
-//     background-position-x: ${x}%;
-//     background-position-y: ${y}%;
-//   }
-//   12.5%{
-//     background-position-x: ${x + Math.random() * 8 - 4}%;
-//     background-position-y: ${y + Math.random() * 8 - 4}%;
-//   }
-//   25%{
-//     background-position-x: ${x + Math.random() * 8 - 4}%;
-//     background-position-y: ${y}%;
-//   }
-//   37.5%{
-//     background-position-x: ${x + Math.random() * 8 - 4}%;
-//     background-position-y: ${y + Math.random() * 8 - 4}%;
-//   }
-//   50%{
-//     background-position-x: ${x}%;
-//     background-position-y: ${y + Math.random() * 8 - 4}%;
-//   }
-//   62.5%{
-//     background-position-x: ${x + Math.random() * 8 - 4}%;
-//     background-position-y: ${y + Math.random() * 8 - 4}%;
-//   }
-//   75%{
-//     background-position-x: ${x + Math.random() * 8 - 4}%;
-//     background-position-y: ${y}%;
-//   }
-//   87.5%{
-//     background-position-x: ${x + Math.random() * 8 - 4}%;
-//     background-position-y: ${y + Math.random() * 8 - 4}%;
-//   }
-//   100%{
-//     background-position-x: ${x}%;
-//     background-position-y: ${y}%;
-//   }
-// `;
-
 const WaveFrame = (x, y) => keyframes`
 0%, 100%{
   background-position-x: ${x - 4}%;
