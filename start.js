@@ -56,10 +56,11 @@ console.log(`server start on http://localhost:${process.env.PORT}`);
 
 // Init
 fetchLineup();
+checkDB();
 
 // Cron Schedule
 cron.schedule("0 0 * * *", fetchLineup);
-cron.schedule("10 */6 * * *", checkDB);
+cron.schedule("10 8 * * *", checkDB);
 
 // Functions
 async function checkDB() {
@@ -92,7 +93,7 @@ async function checkArtist(artist) {
       params: {
         part: "id",
         id: videoIds.join(","),
-        key: process.env.REACT_APP_YOUTUBE_API_KEY,
+        key: process.env.YOUTUBE_API_KEY,
       },
     });
     const availableIds = items.map((item) => item["id"]);
