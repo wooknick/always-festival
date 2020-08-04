@@ -7,6 +7,7 @@ const wrap = require("express-async-wrap");
 const mongoose = require("mongoose");
 const Artists = require("./artists");
 const axios = require("axios");
+const { google } = require("googleapis");
 
 // const variables
 const LINEUP = { red: [], blue: [] };
@@ -56,11 +57,11 @@ console.log(`server start on http://localhost:${process.env.PORT}`);
 
 // Init
 fetchLineup();
-checkDB();
+// checkDB();
 
 // Cron Schedule
 cron.schedule("0 0 * * *", fetchLineup);
-cron.schedule("10 8 * * *", checkDB);
+// cron.schedule("10 8 * * *", checkDB);
 
 // Functions
 async function checkDB() {
@@ -75,7 +76,7 @@ async function checkDB() {
         console.log("There is no artists");
         return;
       } else {
-        artists.forEach(async (artist) => await checkArtist(artist));
+        artists.forEach((artist) => checkArtist(artist));
         console.log(`DB Check End : ${new Date()}`);
       }
     });
@@ -87,14 +88,22 @@ async function checkDB() {
 async function checkArtist(artist) {
   const videoIds = artist.videos.map((video) => video.id);
   try {
+    //   const {
+    //     data: { items },
+    //   } = await axios.get("https://www.googleapis.com/youtube/v3/videos", {
+    //     params: {
+    //       part: "id",
+    //       id: videoIds.join(","),
+    //       key: process.env.YOUTUBE_API_KEY,
+    //     },
+    //   });
+    const service = google.youtube("v3");
     const {
       data: { items },
-    } = await axios.get("https://www.googleapis.com/youtube/v3/videos", {
-      params: {
-        part: "id",
-        id: videoIds.join(","),
-        key: process.env.YOUTUBE_API_KEY,
-      },
+    } = await service.videos.list({
+      key: process.env.YOUTUBE_API_KEY,
+      part: "id",
+      id: videoIds.join(","),
     });
     const availableIds = items.map((item) => item["id"]);
     if (
