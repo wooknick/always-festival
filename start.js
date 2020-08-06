@@ -57,11 +57,11 @@ console.log(`server start on http://localhost:${process.env.PORT}`);
 
 // Init
 fetchLineup();
-// checkDB();
+checkDB();
 
 // Cron Schedule
 cron.schedule("0 0 * * *", fetchLineup);
-// cron.schedule("10 8 * * *", checkDB);
+cron.schedule("10 8 * * *", checkDB);
 
 // Functions
 async function checkDB() {
@@ -106,6 +106,7 @@ async function checkArtist(artist) {
       id: videoIds.join(","),
     });
     const availableIds = items.map((item) => item["id"]);
+    console.log(availableIds);
     if (
       JSON.stringify(videoIds.sort()) !== JSON.stringify(availableIds.sort())
     ) {
