@@ -6,6 +6,7 @@ const cors = require("cors");
 const wrap = require("express-async-wrap");
 const mongoose = require("mongoose");
 const Artists = require("./artists");
+const Lineups = require("./lineups");
 const axios = require("axios");
 const { google } = require("googleapis");
 
@@ -56,8 +57,9 @@ app.listen(process.env.PORT);
 console.log(`server start on http://localhost:${process.env.PORT}`);
 
 // Init
-fetchLineup();
-checkDB();
+// fetchLineup();
+// checkDB();
+getLineups();
 
 // Cron Schedule
 cron.schedule("0 0 * * *", fetchLineup);
@@ -135,7 +137,11 @@ async function checkArtist(artist) {
 }
 
 async function fetchLineup() {
-  console.log(`fetch Lineup : ${new Date()}`);
+  console.log(`fetch lineup start : ${new Date()}`);
+  const newLineup = [
+    { stage: "red", artist: [] },
+    { stage: "blue", artist: [] },
+  ];
   await Artists.find({ stage: "red" }, (err, artists) => {
     if (err) {
       console.log(err);
@@ -144,7 +150,7 @@ async function fetchLineup() {
       console.log("no artist");
     }
     const red = artists.sort(() => Math.random() - Math.random()).slice(0, 6);
-    LINEUP.red = red;
+    newLineup[0].artist = red;
   });
   await Artists.find({ stage: "blue" }, (err, artists) => {
     if (err) {
@@ -154,20 +160,37 @@ async function fetchLineup() {
       console.log("no artist");
     }
     const blue = artists.sort(() => Math.random() - Math.random()).slice(0, 6);
-    LINEUP.blue = blue;
+    newLineup[1].artist = blue;
   });
+  try {
+    const LineupObj = new Lineups({
+      lineup: newLineup,
+    });
+    await LineupObj.save().catch((err) => {
+      console.log(`Error: create new lineup with DB : ${err}`);
+    });
+    getLineups();
+  } catch (e) {
+    console.log(`Error: create new lineup with Server : ${e}`);
+  }
 }
 
-async function getArtists(req, res) {
-  const stage = req.params.stage;
-  await Artists.find({ stage }, (err, artists) => {
+async function getLineups() {
+  await Lineups.find({}, (err, lineups) => {
     if (err) {
-      return res.status(500).json({ error: err });
+      console.log(err);
     }
-    if (!artists) {
-      return res.status(404).json({ error: "artists not found" });
+    if (!lineups) {
+      console.log("no lineups");
     }
-    const ret = artists.sort(() => Math.random() - Math.random()).slice(0, 6);
-    res.json(ret);
-  });
+    lineups[0].lineup.forEach((lineupItem) => {
+      if (lineupItem.stage === "red") {
+        LINEUP.red = lineupItem.artist;
+      } else if (lineupItem.stage === "blue") {
+        LINEUP.blue = lineupItem.artist;
+      }
+    });
+  })
+    .sort({ updated_at: -1 })
+    .limit(1);
 }
