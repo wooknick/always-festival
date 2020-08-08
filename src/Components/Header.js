@@ -98,7 +98,6 @@ const SliderWrapper = styled.div`
   font-size: 2rem;
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
   hr {
     margin-top: 0em;
     margin-bottom: 0.6em;
