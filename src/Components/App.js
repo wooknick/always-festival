@@ -9,6 +9,7 @@ import {
   Switch,
   Redirect,
 } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 import Home from "./Home";
 import Header from "./Header";
 import Stage from "./Stage";
@@ -19,10 +20,14 @@ import "./fonts/Variete/font.css";
 dotenv.config();
 
 const App = () => {
+  const isSmallWidth = useMediaQuery({ query: "(max-width: 425px)" });
+  const isSmallHeight = useMediaQuery({ query: "(max-height: 375px)" });
+  const isSmall = isSmallWidth || isSmallHeight;
+
   return (
     <ThemeProvider theme={Theme}>
       <>
-        <GlobalStyles />
+        <GlobalStyles bodyFont={isSmall ? "12px" : "16px"} />
         <Router>
           <>
             <Header />

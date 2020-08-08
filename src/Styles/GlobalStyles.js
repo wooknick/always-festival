@@ -10,7 +10,8 @@ export default createGlobalStyle`
     html, body{
         height: 100%;
         width: 100%;
-        font-size: 16px;
+        /* font-size: 16px; */
+        font-size: ${(props) => props.bodyFont};
         font-family: Arial, Helvetica, sans-serif;
         /* disable bounce safari/ios */
         position: fixed;
