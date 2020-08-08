@@ -303,17 +303,17 @@ export default withRouter(({ history, match }) => {
         </Header>
       ) : (
         <Header isHome={match.isExact}>
-          <Menu
-            color={color}
-            isHome={match.isExact}
-            onClick={() => {
-              setIsSliderOpen(true);
-              setIsDropdownOpen(false);
-            }}
-          >
-            <div>|||</div>
+          <Menu color={color} isHome={match.isExact}>
+            <div
+              onClick={() => {
+                setIsSliderOpen(true);
+                setIsDropdownOpen(false);
+              }}
+            >
+              |||
+            </div>
             <div className="stage">
-              <span>{stage}</span>
+              <span>{stage !== "info" ? stage : "information"}</span>
               {stage !== "info" && <span>stage</span>}
             </div>
           </Menu>
