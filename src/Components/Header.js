@@ -317,7 +317,7 @@ export default withRouter(({ history, match }) => {
               {stage !== "info" && <span>stage</span>}
             </div>
           </Menu>
-          {!loading && !isPortrait && (
+          {stage !== "info" && !loading && !isPortrait && (
             <Dropdown stage={stage}>
               <div
                 onClick={() => {
@@ -330,7 +330,7 @@ export default withRouter(({ history, match }) => {
           )}
         </Header>
       )}
-      {!loading && !isPortrait && isDropdownOpen && (
+      {stage !== "info" && !loading && !isPortrait && isDropdownOpen && (
         <DropdownWrapper stage={stage}>
           {data.map((artist, idx) => (
             <DropdownItem
