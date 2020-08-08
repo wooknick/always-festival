@@ -213,7 +213,7 @@ const Stage = ({ history, match, location }) => {
   useEffect(() => {
     if (!loading) {
       if (onStage.videos.length === 0) {
-        setVideos([{ id: "dZqbLlaRKKc", comments: [""] }]); // should be never broken
+        setVideos([{ id: "DoYvGBrPcjQ", comments: [""] }]); // should be never broken
       } else {
         setVideos(onStage.videos.sort(() => Math.random() - Math.random()));
       }
