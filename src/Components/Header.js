@@ -98,6 +98,7 @@ const SliderWrapper = styled.div`
   font-size: 2rem;
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
   hr {
     margin-top: 0em;
     margin-bottom: 0.6em;
@@ -132,7 +133,7 @@ const SliderFooter = styled.div`
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-bottom: 1em;
+    margin-bottom: 1rem;
     svg {
       width: 2.5rem;
       height: 2.5rem;

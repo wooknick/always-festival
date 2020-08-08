@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import GlobalStyles from "../Styles/GlobalStyles";
 import Theme from "../Styles/Theme";
 import { ThemeProvider } from "styled-components";
@@ -21,14 +21,26 @@ import Info from "./Info";
 dotenv.config();
 
 const App = () => {
-  const isSmallWidth = useMediaQuery({ query: "(max-width: 413px)" });
-  const isSmallHeight = useMediaQuery({ query: "(max-height: 375px)" });
+  const [fontSize, setFontSize] = useState("16px");
+  const isMediumWidth = useMediaQuery({ query: "(max-width: 413px)" });
+  const isMediumHeight = useMediaQuery({ query: "(max-height: 413px)" });
+  const isMedium = isMediumWidth || isMediumHeight;
+  const isSmallWidth = useMediaQuery({ query: "(max-width: 374px)" });
+  const isSmallHeight = useMediaQuery({ query: "(max-height: 374px)" });
   const isSmall = isSmallWidth || isSmallHeight;
+
+  useEffect(() => {
+    if (isSmall) {
+      setFontSize("12px");
+    } else if (isMedium) {
+      setFontSize("13px");
+    }
+  }, [isMedium, isSmall]);
 
   return (
     <ThemeProvider theme={Theme}>
       <>
-        <GlobalStyles bodyFont={isSmall ? "12px" : "16px"} />
+        <GlobalStyles bodyFont={fontSize} />
         <Router>
           <>
             <Header />

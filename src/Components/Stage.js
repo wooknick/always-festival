@@ -84,6 +84,7 @@ const Comment = styled.div`
   position: relative;
   overflow: hidden;
   padding: 0px 30px;
+  font-size: 1.2rem;
   div {
     font-family: Mont;
     color: white;
