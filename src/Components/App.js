@@ -34,6 +34,8 @@ const App = () => {
       setFontSize("12px");
     } else if (isMedium) {
       setFontSize("13px");
+    } else {
+      setFontSize("16px");
     }
   }, [isMedium, isSmall]);
 
