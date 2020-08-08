@@ -17,10 +17,11 @@ import Stage from "./Stage";
 import "./fonts/DiscoDiva/font.css";
 import "./fonts/Retrock/font.css";
 import "./fonts/Variete/font.css";
+import Info from "./Info";
 dotenv.config();
 
 const App = () => {
-  const isSmallWidth = useMediaQuery({ query: "(max-width: 425px)" });
+  const isSmallWidth = useMediaQuery({ query: "(max-width: 413px)" });
   const isSmallHeight = useMediaQuery({ query: "(max-height: 375px)" });
   const isSmall = isSmallWidth || isSmallHeight;
 
@@ -34,6 +35,7 @@ const App = () => {
             <Switch>
               <Route exact path="/" component={Home} />
               <Route path="/stage/:stage" component={Stage} />
+              <Route path="/info" component={Info} />
               <Redirect from="*" to="/" />
             </Switch>
           </>

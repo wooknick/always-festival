@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
 import { Instagram } from "./Icons";
@@ -34,7 +34,7 @@ const Menu = styled.div`
     min-width: 32px;
     width: max-content;
     color: ${(props) =>
-      props.stage === "red"
+      props.color === "red"
         ? props.theme.color.mainRed
         : props.theme.color.mainBlue};
     &:hover {
@@ -48,7 +48,7 @@ const Menu = styled.div`
     font-family: Varietee;
     padding-top: 0.2em;
     color: ${(props) =>
-      props.stage === "red"
+      props.color === "red"
         ? props.theme.color.mainRed
         : props.theme.color.mainBlue};
     span:nth-child(1) {
@@ -238,17 +238,24 @@ const DropdownItem = styled.div`
 `;
 
 export default withRouter(({ history, match }) => {
-  const [isSliderOpen, setIsSliderOpen] = useState(true);
+  const [isSliderOpen, setIsSliderOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [stage, setStage] = useState(Math.random() > 0.5 ? "red" : "blue");
+  const [color, setColor] = useState(Math.random() > 0.5 ? "red" : "blue");
   const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
 
   useEffect(() => {
     if (!match.isExact) {
-      setStage(history.location.pathname.split("/").pop());
+      const whereAmI = history.location.pathname.split("/").pop();
+      setStage(whereAmI);
+      if (whereAmI === "info") {
+        setColor(new Date().getSeconds() % 2 === 1 ? "red" : "blue");
+      } else {
+        setColor(whereAmI);
+      }
     }
   }, [history.location.pathname, match.isExact]);
 
@@ -279,7 +286,7 @@ export default withRouter(({ history, match }) => {
       {match.isExact ? (
         <Header isHome={match.isExact}>
           <Menu
-            stage={stage}
+            color={color}
             isHome={match.isExact}
             onClick={() => {
               setIsSliderOpen(true);
@@ -297,7 +304,7 @@ export default withRouter(({ history, match }) => {
       ) : (
         <Header isHome={match.isExact}>
           <Menu
-            stage={stage}
+            color={color}
             isHome={match.isExact}
             onClick={() => {
               setIsSliderOpen(true);
@@ -307,7 +314,7 @@ export default withRouter(({ history, match }) => {
             <div>|||</div>
             <div className="stage">
               <span>{stage}</span>
-              <span>stage</span>
+              {stage !== "info" && <span>stage</span>}
             </div>
           </Menu>
           {!loading && !isPortrait && (
