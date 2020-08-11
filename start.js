@@ -9,6 +9,7 @@ const Artists = require("./artists");
 const Lineups = require("./lineups");
 const axios = require("axios");
 const { google } = require("googleapis");
+const util = require("util");
 
 // const variables
 const LINEUP = { red: [], blue: [] };
@@ -57,7 +58,7 @@ app.listen(process.env.PORT);
 console.log(`server start on http://localhost:${process.env.PORT}`);
 
 // Init
-// fetchLineup();
+fetchLineup();
 // checkDB();
 getLineups();
 
@@ -151,6 +152,7 @@ async function fetchLineup() {
     }
     const red = artists.sort(() => Math.random() - Math.random()).slice(0, 6);
     newLineup[0].artist = red;
+    console.log(`red: ${red.map((i) => i.artist).join(", ")}`);
   });
   await Artists.find({ stage: "blue" }, (err, artists) => {
     if (err) {
@@ -161,6 +163,7 @@ async function fetchLineup() {
     }
     const blue = artists.sort(() => Math.random() - Math.random()).slice(0, 6);
     newLineup[1].artist = blue;
+    console.log(`blue: ${blue.map((i) => i.artist).join(", ")}`);
   });
   try {
     const LineupObj = new Lineups({

@@ -21,4 +21,4 @@ const artistsSchema = new Schema(
   }
 );
 
-module.exports = mongoose.model("artists", artistsSchema);
+module.exports = mongoose.model("artists", artistsSchema, "artists_cc");
