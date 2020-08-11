@@ -58,7 +58,7 @@ app.listen(process.env.PORT);
 console.log(`server start on http://localhost:${process.env.PORT}`);
 
 // Init
-fetchLineup();
+// fetchLineup();
 // checkDB();
 getLineups();
 
