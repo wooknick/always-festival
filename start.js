@@ -61,12 +61,43 @@ console.log(`server start on http://localhost:${process.env.PORT}`);
 // fetchLineup();
 // checkDB();
 getLineups();
+// testVideoId(["PlE_xUktHz0", "p5NV4Y8Nl4A", "ttt", "j2gye27OAbA"]);
 
 // Cron Schedule
 cron.schedule("0 0 * * *", fetchLineup);
 cron.schedule("10 8 * * *", checkDB);
 
 // Functions
+async function testVideoId(videoIds) {
+  try {
+    const service = google.youtube("v3");
+    const {
+      data: { items },
+    } = await service.videos.list({
+      key: process.env.YOUTUBE_API_KEY,
+      part: "id, status",
+      id: videoIds.join(","),
+    });
+    console.log(items);
+    const availableItems = items.filter((item) =>
+      validateStatus(item["status"])
+    );
+    console.log(availableItems);
+    const availableIds = availableItems.map((item) => item["id"]);
+    console.log(availableIds);
+  } catch (e) {
+    console.log(`error on youtube data api : ${e}`);
+  }
+}
+
+function validateStatus(status) {
+  if (status["license"] === "creativeCommon") {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 async function checkDB() {
   console.log(`DB Check Start : ${new Date()}`);
   try {
@@ -91,24 +122,18 @@ async function checkDB() {
 async function checkArtist(artist) {
   const videoIds = artist.videos.map((video) => video.id);
   try {
-    //   const {
-    //     data: { items },
-    //   } = await axios.get("https://www.googleapis.com/youtube/v3/videos", {
-    //     params: {
-    //       part: "id",
-    //       id: videoIds.join(","),
-    //       key: process.env.YOUTUBE_API_KEY,
-    //     },
-    //   });
     const service = google.youtube("v3");
     const {
       data: { items },
     } = await service.videos.list({
       key: process.env.YOUTUBE_API_KEY,
-      part: "id",
+      part: "id, status",
       id: videoIds.join(","),
     });
-    const availableIds = items.map((item) => item["id"]);
+    const availableItems = items.filter((item) =>
+      validateStatus(item["status"])
+    );
+    const availableIds = availableItems.map((item) => item["id"]);
     console.log(availableIds);
     if (
       JSON.stringify(videoIds.sort()) !== JSON.stringify(availableIds.sort())
