@@ -277,7 +277,7 @@ const Stage = ({ history, match, location }) => {
               width="100%"
               height="100%"
               video={videos[0] && videos[0].id}
-              playsInline={true}
+              playsInline={1}
             />
           </YoutubeWrapper>
           <Artist>
