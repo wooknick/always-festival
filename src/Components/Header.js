@@ -171,6 +171,9 @@ export default withRouter(({ history, match }) => {
     if (!match.isExact && stage !== "info") {
       setIsPlaying(true);
       play();
+    } else {
+      setIsPlaying(false);
+      stop();
     }
     return () => {
       stop();
