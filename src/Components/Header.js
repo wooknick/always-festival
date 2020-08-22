@@ -4,6 +4,8 @@ import { withRouter } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
 import Slider from "./Slider";
+import useSound from "use-sound";
+import crowdSound from "../Sounds/crowd.wav";
 
 const Header = styled.header`
   width: 100%;
@@ -149,6 +151,10 @@ const DropdownItem = styled.div`
 `;
 
 export default withRouter(({ history, match }) => {
+  const [isPlaying, setIsPlaying] = useState();
+  const [crowdVolume, setCrowdVolume] = useState(0.18);
+  const [play, { stop }] = useSound(crowdSound, { volume: crowdVolume });
+
   const [isSliderOpen, setIsSliderOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -157,6 +163,16 @@ export default withRouter(({ history, match }) => {
   const [stage, setStage] = useState(Math.random() > 0.5 ? "red" : "blue");
   const [color, setColor] = useState(Math.random() > 0.5 ? "red" : "blue");
   const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
+
+  useEffect(() => {
+    if (!match.isExact && stage !== "info") {
+      setIsPlaying(true);
+      play();
+    }
+    return () => {
+      stop();
+    };
+  }, [match.isExact, play, stage, stop]);
 
   useEffect(() => {
     if (!match.isExact) {
@@ -181,6 +197,16 @@ export default withRouter(({ history, match }) => {
       setLoading(false);
     });
   }, [stage]);
+
+  const toggleCrowd = () => {
+    if (isPlaying) {
+      stop();
+      setIsPlaying(false);
+    } else {
+      play();
+      setIsPlaying(true);
+    }
+  };
 
   const moveTo = (to) => {
     history.push(to);
@@ -263,6 +289,10 @@ export default withRouter(({ history, match }) => {
           stage={stage}
           isSliderOpen={isSliderOpen}
           setIsSliderOpen={setIsSliderOpen}
+          isPlaying={isPlaying}
+          toggleCrowd={toggleCrowd}
+          crowdVolume={crowdVolume}
+          setCrowdVolume={setCrowdVolume}
         />
       )}
     </>

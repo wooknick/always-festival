@@ -1,6 +1,7 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 import { Instagram } from "./Icons";
+import concertImg from "../Images/concert.svg";
 
 const Wrapper = styled.div`
   z-index: 10;
@@ -91,7 +92,43 @@ const SliderFooter = styled.div`
   }
 `;
 
-const Slider = ({ moveTo, stage, isSliderOpen, setIsSliderOpen }) => {
+const Crowd = styled.div`
+  position: relative;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: white 2px solid;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+  div.forbidden {
+    position: absolute;
+    width: 0%;
+    height: 100%;
+    border-right: white 1px solid;
+    border-left: white 1px solid;
+    transform: rotateZ(45deg);
+  }
+`;
+
+const CrowdVolume = styled.input`
+  margin-right: 1em;
+`;
+
+const Slider = ({
+  moveTo,
+  stage,
+  isSliderOpen,
+  setIsSliderOpen,
+  isPlaying,
+  toggleCrowd,
+  crowdVolume,
+  setCrowdVolume,
+}) => {
   return (
     <Wrapper
       onClick={() => {
@@ -138,6 +175,23 @@ const Slider = ({ moveTo, stage, isSliderOpen, setIsSliderOpen }) => {
           }}
         >
           Information
+        </SliderItem>
+        <SliderItem>
+          <CrowdVolume
+            onChange={(e) => {
+              console.log(e.target.value);
+              setCrowdVolume(Number(e.target.value));
+            }}
+            type="range"
+            step="0.01"
+            min="0"
+            max="1"
+            value={crowdVolume}
+          ></CrowdVolume>
+          <Crowd onClick={toggleCrowd}>
+            <img src={concertImg} alt="concertImg" />
+            {!isPlaying && <div className="forbidden"></div>}
+          </Crowd>
         </SliderItem>
         <SliderFooter>
           <div className="social">
