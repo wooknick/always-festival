@@ -153,7 +153,10 @@ const DropdownItem = styled.div`
 export default withRouter(({ history, match }) => {
   const [isPlaying, setIsPlaying] = useState();
   const [crowdVolume, setCrowdVolume] = useState(0.18);
-  const [play, { stop }] = useSound(crowdSound, { volume: crowdVolume });
+  const [play, { stop }] = useSound(crowdSound, {
+    volume: crowdVolume,
+    loop: true,
+  });
 
   const [isSliderOpen, setIsSliderOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
