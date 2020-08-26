@@ -1,7 +1,7 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 import { Instagram } from "./Icons";
-import concertImg from "../Images/concert.svg";
+import concertImg from "../Images/ambient.svg";
 
 const Wrapper = styled.div`
   z-index: 10;
@@ -102,8 +102,8 @@ const Crowd = styled.div`
   justify-content: center;
   img {
     position: absolute;
-    width: 100%;
-    height: 100%;
+    width: 90%;
+    height: 90%;
   }
   div.forbidden {
     position: absolute;
