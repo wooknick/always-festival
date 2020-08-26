@@ -5,7 +5,7 @@ import { useMediaQuery } from "react-responsive";
 import axios from "axios";
 import Slider from "./Slider";
 import useSound from "use-sound";
-import crowdSound from "../Sounds/128Mixdown_8min_fadeinout.mp3";
+import crowdSound from "../Sounds/5min_fadeinout.wav";
 
 const Header = styled.header`
   width: 100%;
