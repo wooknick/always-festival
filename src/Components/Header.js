@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { withRouter } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
-import { Instagram } from "./Icons";
+import Slider from "./Slider";
+import useSound from "use-sound";
+import crowdSound from "../Sounds/5min_fadeinout.wav";
 
 const Header = styled.header`
   width: 100%;
@@ -26,7 +28,7 @@ const Menu = styled.div`
   justify-content: flex-start;
   align-items: center;
   margin-left: 0.3em;
-  div:first-child {
+  div.burger {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -56,95 +58,6 @@ const Menu = styled.div`
         content: " ";
       }
     }
-  }
-`;
-
-const Slider = styled.div`
-  z-index: 10;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(1, 1, 1, 0.5);
-`;
-
-const slideIn = keyframes`
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0%);
-  }
-`;
-
-const slideOut = keyframes`
-  from {
-    transform: translateX(0%);
-  }
-  to {
-    transform: translateX(-100%);
-  }
-`;
-
-const SliderWrapper = styled.div`
-  position: absolute;
-  width: 20rem;
-  height: 100%;
-  background-color: ${(props) =>
-    props.stage === "red"
-      ? props.theme.color.mainRed
-      : props.theme.color.mainBlue};
-  padding: 3rem 2rem 1rem 2rem;
-  animation: ${(props) => (props.open ? slideIn : slideOut)} 0.3s linear;
-  font-size: 2rem;
-  display: flex;
-  flex-direction: column;
-  hr {
-    margin-top: 0em;
-    margin-bottom: 0.6em;
-  }
-`;
-
-const SliderItem = styled.div`
-  width: 100%;
-  height: 1.2em;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  font-size: 2rem;
-  margin-bottom: 0.6em;
-  color: white;
-  font-family: Varietee;
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-const SliderFooter = styled.div`
-  width: 100%;
-  min-height: 1.2em;
-  flex: 1;
-  color: white;
-  font-family: Mont;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  div.social {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1rem;
-    svg {
-      width: 2.5rem;
-      height: 2.5rem;
-      fill: white;
-      &:hover {
-        cursor: pointer;
-      }
-    }
-  }
-  div.copyright {
-    font-size: 0.7rem;
-    text-align: center;
   }
 `;
 
@@ -238,6 +151,13 @@ const DropdownItem = styled.div`
 `;
 
 export default withRouter(({ history, match }) => {
+  const [isPlaying, setIsPlaying] = useState();
+  const [crowdVolume, setCrowdVolume] = useState(0.28);
+  const [play, { stop }] = useSound(crowdSound, {
+    volume: crowdVolume,
+    loop: true,
+  });
+
   const [isSliderOpen, setIsSliderOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -246,6 +166,19 @@ export default withRouter(({ history, match }) => {
   const [stage, setStage] = useState(Math.random() > 0.5 ? "red" : "blue");
   const [color, setColor] = useState(Math.random() > 0.5 ? "red" : "blue");
   const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
+
+  useEffect(() => {
+    if (!match.isExact && stage !== "info") {
+      setIsPlaying(true);
+      play();
+    } else {
+      setIsPlaying(false);
+      stop();
+    }
+    return () => {
+      stop();
+    };
+  }, [match.isExact, play, stage, stop]);
 
   useEffect(() => {
     if (!match.isExact) {
@@ -271,6 +204,16 @@ export default withRouter(({ history, match }) => {
     });
   }, [stage]);
 
+  const toggleCrowd = () => {
+    if (isPlaying) {
+      stop();
+      setIsPlaying(false);
+    } else {
+      play();
+      setIsPlaying(true);
+    }
+  };
+
   const moveTo = (to) => {
     history.push(to);
     setIsSliderOpen(false);
@@ -292,7 +235,7 @@ export default withRouter(({ history, match }) => {
               setIsSliderOpen(true);
             }}
           >
-            <div>|||</div>
+            <div className="burger">|||</div>
           </Menu>
           <Logo stage={stage}>
             <div className="main">
@@ -309,6 +252,7 @@ export default withRouter(({ history, match }) => {
                 setIsSliderOpen(true);
                 setIsDropdownOpen(false);
               }}
+              className="burger"
             >
               |||
             </div>
@@ -347,67 +291,15 @@ export default withRouter(({ history, match }) => {
       )}
       {isSliderOpen && (
         <Slider
-          onClick={() => {
-            setIsSliderOpen(false);
-          }}
-        >
-          <SliderWrapper
-            open={isSliderOpen}
-            stage={stage}
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          >
-            <SliderItem
-              onClick={() => {
-                moveTo("/");
-              }}
-            >
-              Entrance
-            </SliderItem>
-            <div>
-              <hr />
-            </div>
-            <SliderItem
-              onClick={() => {
-                moveTo("/stage/red");
-              }}
-            >
-              Red Stage
-            </SliderItem>
-            <SliderItem
-              onClick={() => {
-                moveTo("/stage/blue");
-              }}
-            >
-              Blue Stage
-            </SliderItem>
-            <div>
-              <hr />
-            </div>
-            <SliderItem
-              onClick={() => {
-                moveTo("/info");
-              }}
-            >
-              Information
-            </SliderItem>
-            <SliderFooter>
-              <div className="social">
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="https://www.instagram.com/alwaysfestival/"
-                >
-                  <Instagram />
-                </a>
-              </div>
-              <div className="copyright">
-                &copy; 2020. AlwaysFestival all rights reserved.
-              </div>
-            </SliderFooter>
-          </SliderWrapper>
-        </Slider>
+          moveTo={moveTo}
+          stage={stage}
+          isSliderOpen={isSliderOpen}
+          setIsSliderOpen={setIsSliderOpen}
+          isPlaying={isPlaying}
+          toggleCrowd={toggleCrowd}
+          crowdVolume={crowdVolume}
+          setCrowdVolume={setCrowdVolume}
+        />
       )}
     </>
   );
