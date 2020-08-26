@@ -5,7 +5,7 @@ import { useMediaQuery } from "react-responsive";
 import axios from "axios";
 import Slider from "./Slider";
 import useSound from "use-sound";
-import crowdSound from "../Sounds/crowd.wav";
+import crowdSound from "../Sounds/128Mixdown_8min_fadeinout.mp3";
 
 const Header = styled.header`
   width: 100%;
@@ -152,7 +152,7 @@ const DropdownItem = styled.div`
 
 export default withRouter(({ history, match }) => {
   const [isPlaying, setIsPlaying] = useState();
-  const [crowdVolume, setCrowdVolume] = useState(0.18);
+  const [crowdVolume, setCrowdVolume] = useState(0.28);
   const [play, { stop }] = useSound(crowdSound, {
     volume: crowdVolume,
     loop: true,
