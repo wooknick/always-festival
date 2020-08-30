@@ -187,7 +187,7 @@ const Slider = ({
             min="0"
             max="1"
             value={crowdVolume}
-          ></CrowdVolume>
+          />
           <Crowd onClick={toggleCrowd}>
             <img src={concertImg} alt="concertImg" />
             {!isPlaying && <div className="forbidden"></div>}

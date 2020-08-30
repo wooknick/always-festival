@@ -152,7 +152,7 @@ const DropdownItem = styled.div`
 
 export default withRouter(({ history, match }) => {
   const [isPlaying, setIsPlaying] = useState();
-  const [crowdVolume, setCrowdVolume] = useState(0.28);
+  const [crowdVolume, setCrowdVolume] = useState(0.5);
   const [play, { stop }] = useSound(crowdSound, {
     volume: crowdVolume,
     loop: true,
@@ -168,7 +168,7 @@ export default withRouter(({ history, match }) => {
   const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
 
   useEffect(() => {
-    if (!match.isExact && stage !== "info") {
+    if (stage !== "info") {
       setIsPlaying(true);
       play();
     } else {
