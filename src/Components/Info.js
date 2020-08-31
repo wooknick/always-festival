@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
+import ColorContext from "./ColorContext";
 
 const Wrapper = styled.div`
   padding-top: 3.5rem;
@@ -47,9 +48,7 @@ const Info = () => {
   const [isPortrait, setIsPortrait] = useState(
     window.innerHeight > window.innerWidth
   );
-  const [color, setColor] = useState(
-    new Date().getSeconds() % 2 === 1 ? "red" : "blue"
-  );
+  const { color, setColor } = useContext(ColorContext);
 
   useEffect(() => {
     const handleResize = () => {
@@ -61,7 +60,7 @@ const Info = () => {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [color, setColor]);
   return (
     <Wrapper height={windowHeight} width={windowWidth} isPortrait={isPortrait}>
       <Contents color={color}>

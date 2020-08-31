@@ -34,7 +34,7 @@ const SliderWrapper = styled.div`
   width: 20rem;
   height: 100%;
   background-color: ${(props) =>
-    props.stage === "red"
+    props.color === "red"
       ? props.theme.color.mainRed
       : props.theme.color.mainBlue};
   padding: 3rem 2rem 1rem 2rem;
@@ -121,7 +121,7 @@ const CrowdVolume = styled.input`
 
 const Slider = ({
   moveTo,
-  stage,
+  color,
   isSliderOpen,
   setIsSliderOpen,
   isPlaying,
@@ -137,7 +137,7 @@ const Slider = ({
     >
       <SliderWrapper
         open={isSliderOpen}
-        stage={stage}
+        color={color}
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -175,6 +175,13 @@ const Slider = ({
           }}
         >
           Information
+        </SliderItem>
+        <SliderItem
+          onClick={() => {
+            moveTo("/contact");
+          }}
+        >
+          Contact Us
         </SliderItem>
         <SliderItem>
           <CrowdVolume
