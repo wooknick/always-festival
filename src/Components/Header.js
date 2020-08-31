@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
@@ -6,6 +6,7 @@ import axios from "axios";
 import Slider from "./Slider";
 import useSound from "use-sound";
 import crowdSound from "../Sounds/5min_fadeinout.wav";
+import ColorContext from "./ColorContext";
 
 const Header = styled.header`
   width: 100%;
@@ -44,7 +45,7 @@ const Menu = styled.div`
     }
   }
 
-  div.stage {
+  div.whereAmI {
     width: max-content;
     margin-left: 0.7em;
     font-family: Varietee;
@@ -97,7 +98,7 @@ const Dropdown = styled.div`
     align-items: center;
     font-family: "Varietee";
     background-color: ${(props) =>
-      props.stage === "red"
+      props.color === "red"
         ? props.theme.color.mainRed
         : props.theme.color.mainBlue};
     color: white;
@@ -118,13 +119,18 @@ const DropdownWrapper = styled.div`
   height: max-content;
   max-height: 50vh;
   overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
   background-color: white;
   color: ${(props) =>
-    props.stage === "red"
+    props.color === "red"
       ? props.theme.color.mainRed
       : props.theme.color.mainBlue};
   text-transform: uppercase;
   border: white 5px solid;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const DropdownItem = styled.div`
@@ -132,7 +138,7 @@ const DropdownItem = styled.div`
   height: 3.2em;
   font-size: 1.4rem;
   color: ${(props) =>
-    props.stage === "red"
+    props.color === "red"
       ? props.theme.color.mainRed
       : props.theme.color.mainBlue};
   display: flex;
@@ -144,7 +150,7 @@ const DropdownItem = styled.div`
     cursor: pointer;
     color: white;
     background-color: ${(props) =>
-      props.stage === "red"
+      props.color === "red"
         ? props.theme.color.mainRed
         : props.theme.color.mainBlue};
   }
@@ -152,7 +158,7 @@ const DropdownItem = styled.div`
 
 export default withRouter(({ history, match }) => {
   const [isPlaying, setIsPlaying] = useState();
-  const [crowdVolume, setCrowdVolume] = useState(0.28);
+  const [crowdVolume, setCrowdVolume] = useState(0.5);
   const [play, { stop }] = useSound(crowdSound, {
     volume: crowdVolume,
     loop: true,
@@ -163,12 +169,13 @@ export default withRouter(({ history, match }) => {
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [stage, setStage] = useState(Math.random() > 0.5 ? "red" : "blue");
-  const [color, setColor] = useState(Math.random() > 0.5 ? "red" : "blue");
+  const [whereAmI, setWhereAmI] = useState("");
+  const [stage, setStage] = useState("");
+  const { color, setColor } = useContext(ColorContext);
   const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
 
   useEffect(() => {
-    if (!match.isExact && stage !== "info") {
+    if (stage !== "info") {
       setIsPlaying(true);
       play();
     } else {
@@ -178,19 +185,20 @@ export default withRouter(({ history, match }) => {
     return () => {
       stop();
     };
-  }, [match.isExact, play, stage, stop]);
+  }, [color, match.isExact, play, stage, stop]);
 
   useEffect(() => {
-    if (!match.isExact) {
-      const whereAmI = history.location.pathname.split("/").pop();
-      setStage(whereAmI);
-      if (whereAmI === "info") {
-        setColor(new Date().getSeconds() % 2 === 1 ? "red" : "blue");
-      } else {
-        setColor(whereAmI);
+    const locationInfo = history.location.pathname.split("/");
+    if (match.isExact) {
+      setWhereAmI("entrance");
+    } else if (!match.isExact) {
+      setWhereAmI(locationInfo[1]);
+      if (locationInfo[1] === "stage") {
+        setStage(locationInfo[2]);
+        setColor(locationInfo[2]);
       }
     }
-  }, [history.location.pathname, match.isExact]);
+  }, [history.location.pathname, match.isExact, setColor, whereAmI]);
 
   useEffect(() => {
     setLoading(true);
@@ -256,13 +264,13 @@ export default withRouter(({ history, match }) => {
             >
               |||
             </div>
-            <div className="stage">
-              <span>{stage !== "info" ? stage : "information"}</span>
-              {stage !== "info" && <span>stage</span>}
+            <div className="whereAmI">
+              <span>{whereAmI === "stage" ? stage : whereAmI}</span>
+              {whereAmI === "stage" && <span>stage</span>}
             </div>
           </Menu>
-          {stage !== "info" && !loading && !isPortrait && (
-            <Dropdown stage={stage}>
+          {whereAmI === "stage" && !loading && !isPortrait && (
+            <Dropdown color={color}>
               <div
                 onClick={() => {
                   setIsDropdownOpen((v) => !v);
@@ -274,12 +282,12 @@ export default withRouter(({ history, match }) => {
           )}
         </Header>
       )}
-      {stage !== "info" && !loading && !isPortrait && isDropdownOpen && (
-        <DropdownWrapper stage={stage}>
+      {whereAmI === "stage" && !loading && !isPortrait && isDropdownOpen && (
+        <DropdownWrapper color={color}>
           {data.map((artist, idx) => (
             <DropdownItem
               key={idx}
-              stage={stage}
+              color={color}
               onClick={() => {
                 handleLineupClick(idx);
               }}
@@ -292,7 +300,7 @@ export default withRouter(({ history, match }) => {
       {isSliderOpen && (
         <Slider
           moveTo={moveTo}
-          stage={stage}
+          color={color}
           isSliderOpen={isSliderOpen}
           setIsSliderOpen={setIsSliderOpen}
           isPlaying={isPlaying}

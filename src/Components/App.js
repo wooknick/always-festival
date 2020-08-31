@@ -13,11 +13,14 @@ import { useMediaQuery } from "react-responsive";
 import Home from "./Home";
 import Header from "./Header";
 import Stage from "./Stage";
+import Info from "./Info";
+import Contact from "./Contact";
+import ColorContext from "./ColorContext";
 
 import "./fonts/DiscoDiva/font.css";
 import "./fonts/Retrock/font.css";
 import "./fonts/Variete/font.css";
-import Info from "./Info";
+
 dotenv.config();
 
 const App = () => {
@@ -28,6 +31,10 @@ const App = () => {
   const isSmallWidth = useMediaQuery({ query: "(max-width: 374px)" });
   const isSmallHeight = useMediaQuery({ query: "(max-height: 374px)" });
   const isSmall = isSmallWidth || isSmallHeight;
+
+  const [color, setColor] = useState(
+    new Date().getSeconds() % 2 === 1 ? "red" : "blue"
+  );
 
   useEffect(() => {
     if (isSmall) {
@@ -45,13 +52,16 @@ const App = () => {
         <GlobalStyles bodyFont={fontSize} />
         <Router>
           <>
-            <Header />
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <Route path="/stage/:stage" component={Stage} />
-              <Route path="/info" component={Info} />
-              <Redirect from="*" to="/" />
-            </Switch>
+            <ColorContext.Provider value={{ color, setColor }}>
+              <Header />
+              <Switch>
+                <Route exact path="/" component={Home} />
+                <Route path="/stage/:stage" component={Stage} />
+                <Route path="/info" component={Info} />
+                <Route path="/contact" component={Contact} />
+                <Redirect from="*" to="/" />
+              </Switch>
+            </ColorContext.Provider>
           </>
         </Router>
       </>

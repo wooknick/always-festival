@@ -1,5 +1,6 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
+import { useMediaQuery } from "react-responsive";
 import { Instagram } from "./Icons";
 import concertImg from "../Images/ambient.svg";
 
@@ -34,7 +35,7 @@ const SliderWrapper = styled.div`
   width: 20rem;
   height: 100%;
   background-color: ${(props) =>
-    props.stage === "red"
+    props.color === "red"
       ? props.theme.color.mainRed
       : props.theme.color.mainBlue};
   padding: 3rem 2rem 1rem 2rem;
@@ -121,7 +122,7 @@ const CrowdVolume = styled.input`
 
 const Slider = ({
   moveTo,
-  stage,
+  color,
   isSliderOpen,
   setIsSliderOpen,
   isPlaying,
@@ -129,6 +130,8 @@ const Slider = ({
   crowdVolume,
   setCrowdVolume,
 }) => {
+  const isEnoughHeight = useMediaQuery({ query: "(min-height: 550px)" });
+
   return (
     <Wrapper
       onClick={() => {
@@ -137,7 +140,7 @@ const Slider = ({
     >
       <SliderWrapper
         open={isSliderOpen}
-        stage={stage}
+        color={color}
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -176,6 +179,13 @@ const Slider = ({
         >
           Information
         </SliderItem>
+        <SliderItem
+          onClick={() => {
+            moveTo("/contact");
+          }}
+        >
+          Contact Us
+        </SliderItem>
         <SliderItem>
           <CrowdVolume
             onChange={(e) => {
@@ -187,7 +197,7 @@ const Slider = ({
             min="0"
             max="1"
             value={crowdVolume}
-          ></CrowdVolume>
+          />
           <Crowd onClick={toggleCrowd}>
             <img src={concertImg} alt="concertImg" />
             {!isPlaying && <div className="forbidden"></div>}
@@ -203,9 +213,11 @@ const Slider = ({
               <Instagram />
             </a>
           </div>
-          <div className="copyright">
-            &copy; 2020. AlwaysFestival all rights reserved.
-          </div>
+          {isEnoughHeight && (
+            <div className="copyright">
+              &copy; 2020. AlwaysFestival all rights reserved.
+            </div>
+          )}
         </SliderFooter>
       </SliderWrapper>
     </Wrapper>
