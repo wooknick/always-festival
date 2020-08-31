@@ -119,6 +119,8 @@ const DropdownWrapper = styled.div`
   height: max-content;
   max-height: 50vh;
   overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
   background-color: white;
   color: ${(props) =>
     props.color === "red"
@@ -126,6 +128,9 @@ const DropdownWrapper = styled.div`
       : props.theme.color.mainBlue};
   text-transform: uppercase;
   border: white 5px solid;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const DropdownItem = styled.div`
@@ -302,7 +307,6 @@ export default withRouter(({ history, match }) => {
           toggleCrowd={toggleCrowd}
           crowdVolume={crowdVolume}
           setCrowdVolume={setCrowdVolume}
-          isPortrait={isPortrait}
         />
       )}
     </>

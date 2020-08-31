@@ -41,7 +41,12 @@ const Form = styled.form`
   height: 70%;
   align-items: center;
   overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 
+  &::-webkit-scrollbar {
+    display: none;
+  }
   input {
     margin-bottom: 1em;
     border: ${(props) =>

@@ -125,6 +125,8 @@ const LineupWrapper = styled.div`
   width: 100%;
   height: 100%;
   overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
   background-color: white;
   color: ${(props) =>
     props.stage === "red"
@@ -132,6 +134,9 @@ const LineupWrapper = styled.div`
       : props.theme.color.mainBlue};
   text-transform: uppercase;
   border: white 5px solid;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const LineupItem = styled.div`

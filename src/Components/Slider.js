@@ -1,5 +1,6 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
+import { useMediaQuery } from "react-responsive";
 import { Instagram } from "./Icons";
 import concertImg from "../Images/ambient.svg";
 
@@ -128,8 +129,9 @@ const Slider = ({
   toggleCrowd,
   crowdVolume,
   setCrowdVolume,
-  isPortrait,
 }) => {
+  const isEnoughHeight = useMediaQuery({ query: "(min-height: 550px)" });
+
   return (
     <Wrapper
       onClick={() => {
@@ -211,7 +213,7 @@ const Slider = ({
               <Instagram />
             </a>
           </div>
-          {isPortrait && (
+          {isEnoughHeight && (
             <div className="copyright">
               &copy; 2020. AlwaysFestival all rights reserved.
             </div>
