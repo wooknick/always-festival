@@ -302,6 +302,7 @@ export default withRouter(({ history, match }) => {
           toggleCrowd={toggleCrowd}
           crowdVolume={crowdVolume}
           setCrowdVolume={setCrowdVolume}
+          isPortrait={isPortrait}
         />
       )}
     </>

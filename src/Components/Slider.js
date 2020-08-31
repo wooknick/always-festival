@@ -128,6 +128,7 @@ const Slider = ({
   toggleCrowd,
   crowdVolume,
   setCrowdVolume,
+  isPortrait,
 }) => {
   return (
     <Wrapper
@@ -210,9 +211,11 @@ const Slider = ({
               <Instagram />
             </a>
           </div>
-          <div className="copyright">
-            &copy; 2020. AlwaysFestival all rights reserved.
-          </div>
+          {isPortrait && (
+            <div className="copyright">
+              &copy; 2020. AlwaysFestival all rights reserved.
+            </div>
+          )}
         </SliderFooter>
       </SliderWrapper>
     </Wrapper>

@@ -14,6 +14,7 @@ import Home from "./Home";
 import Header from "./Header";
 import Stage from "./Stage";
 import Info from "./Info";
+import Contact from "./Contact";
 import ColorContext from "./ColorContext";
 
 import "./fonts/DiscoDiva/font.css";
@@ -57,6 +58,7 @@ const App = () => {
                 <Route exact path="/" component={Home} />
                 <Route path="/stage/:stage" component={Stage} />
                 <Route path="/info" component={Info} />
+                <Route path="/contact" component={Contact} />
                 <Redirect from="*" to="/" />
               </Switch>
             </ColorContext.Provider>

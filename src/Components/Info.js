@@ -60,12 +60,13 @@ const Info = () => {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [color, setColor]);
+  }, []);
   return (
     <Wrapper height={windowHeight} width={windowWidth} isPortrait={isPortrait}>
       <Contents color={color}>
         <span>Festival is always on.</span>
         <span>We offer 12 live perfomances on two stages every day.</span>
+        <span>(UTC +0)</span>
       </Contents>
     </Wrapper>
   );

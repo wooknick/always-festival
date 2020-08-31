@@ -11,6 +11,7 @@
     "axios": "^0.19.2",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
+    "emailjs-com": "^2.6.3",
     "express": "^4.17.1",
     "express-async-wrap": "^1.0.0",
     "googleapis": "^58.0.0",
