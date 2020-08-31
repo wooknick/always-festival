@@ -187,8 +187,8 @@ const Contact = () => {
     >
       <ContactInfo color={color}>
         <span>
-          To improve our service, we need your honest opinion. Please feel free
-          and leave your comments on the form below.
+          We are trying various attempts for your fun. Please share your
+          thoughts with us.
         </span>
       </ContactInfo>
       {sendOk ? (
