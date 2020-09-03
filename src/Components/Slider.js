@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { useMediaQuery } from "react-responsive";
+import ClipboardJS from "clipboard";
+import ReactTooltip from "react-tooltip";
 import { Instagram, Twitter, Share } from "./Icons";
 import concertImg from "../Images/ambient.svg";
 
@@ -10,6 +12,12 @@ const Wrapper = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(1, 1, 1, 0.5);
+  div.myTooltip {
+    color: ${(props) =>
+      props.color === "red"
+        ? props.theme.color.mainRed
+        : props.theme.color.mainBlue} !important;
+  }
 `;
 
 const slideIn = keyframes`
@@ -134,9 +142,18 @@ const Slider = ({
   setCrowdVolume,
 }) => {
   const isEnoughHeight = useMediaQuery({ query: "(min-height: 550px)" });
+  const shareRef = useRef();
 
+  useEffect(() => {
+    console.log(shareRef.current);
+    const clipboard = new ClipboardJS(shareRef.current);
+    return () => {
+      clipboard.destroy();
+    };
+  }, []);
   return (
     <Wrapper
+      color={color}
       onClick={() => {
         setIsSliderOpen(false);
       }}
@@ -222,8 +239,13 @@ const Slider = ({
             >
               <Twitter />
             </a>
-
-            <Share />
+            <div
+              ref={shareRef}
+              data-tip="Link Copied"
+              data-clipboard-text="https://www.alwaysfestival.com/"
+            >
+              <Share />
+            </div>
           </div>
           {isEnoughHeight && (
             <div className="copyright">
@@ -232,6 +254,16 @@ const Slider = ({
           )}
         </SliderFooter>
       </SliderWrapper>
+      <ReactTooltip
+        place="top"
+        effect="solid"
+        event="click"
+        eventOff="mouseout"
+        delayHide="1000"
+        textColor="blue"
+        backgroundColor="white"
+        className="myTooltip"
+      />
     </Wrapper>
   );
 };
