@@ -112,10 +112,12 @@ const Crowd = styled.div`
   border-radius: 50%;
   display: flex;
   justify-content: center;
+  align-items: center;
   img {
     position: absolute;
-    width: 90%;
-    height: 90%;
+    width: 70%;
+    height: 70%;
+    margin-bottom: 0.1em;
   }
   div.forbidden {
     position: absolute;
