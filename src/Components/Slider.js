@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { useMediaQuery } from "react-responsive";
-import { Instagram } from "./Icons";
+import ClipboardJS from "clipboard";
+import ReactTooltip from "react-tooltip";
+import { Instagram, Twitter, Share } from "./Icons";
 import concertImg from "../Images/ambient.svg";
 
 const Wrapper = styled.div`
@@ -10,6 +12,12 @@ const Wrapper = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(1, 1, 1, 0.5);
+  div.myTooltip {
+    color: ${(props) =>
+      props.color === "red"
+        ? props.theme.color.mainRed
+        : props.theme.color.mainBlue} !important;
+  }
 `;
 
 const slideIn = keyframes`
@@ -78,6 +86,9 @@ const SliderFooter = styled.div`
     display: flex;
     justify-content: center;
     margin-bottom: 1rem;
+    a:not(:last-child) {
+      margin-right: 0.5em;
+    }
     svg {
       width: 2.5rem;
       height: 2.5rem;
@@ -101,10 +112,12 @@ const Crowd = styled.div`
   border-radius: 50%;
   display: flex;
   justify-content: center;
+  align-items: center;
   img {
     position: absolute;
-    width: 90%;
-    height: 90%;
+    width: 70%;
+    height: 70%;
+    margin-bottom: 0.1em;
   }
   div.forbidden {
     position: absolute;
@@ -131,9 +144,17 @@ const Slider = ({
   setCrowdVolume,
 }) => {
   const isEnoughHeight = useMediaQuery({ query: "(min-height: 550px)" });
+  const shareRef = useRef();
 
+  useEffect(() => {
+    const clipboard = new ClipboardJS(shareRef.current);
+    return () => {
+      clipboard.destroy();
+    };
+  }, []);
   return (
     <Wrapper
+      color={color}
       onClick={() => {
         setIsSliderOpen(false);
       }}
@@ -208,10 +229,24 @@ const Slider = ({
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href="https://www.instagram.com/alwaysfestival/"
+              href="https://www.instagram.com/always_fest/"
             >
               <Instagram />
             </a>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://twitter.com/always_fest"
+            >
+              <Twitter />
+            </a>
+            <div
+              ref={shareRef}
+              data-tip="Link Copied"
+              data-clipboard-text="https://www.alwaysfestival.com/"
+            >
+              <Share />
+            </div>
           </div>
           {isEnoughHeight && (
             <div className="copyright">
@@ -220,6 +255,16 @@ const Slider = ({
           )}
         </SliderFooter>
       </SliderWrapper>
+      <ReactTooltip
+        place="top"
+        effect="solid"
+        event="click"
+        eventOff="mouseout"
+        delayHide="1000"
+        textColor="blue"
+        backgroundColor="white"
+        className="myTooltip"
+      />
     </Wrapper>
   );
 };
