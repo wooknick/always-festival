@@ -145,7 +145,6 @@ const Slider = ({
   const shareRef = useRef();
 
   useEffect(() => {
-    console.log(shareRef.current);
     const clipboard = new ClipboardJS(shareRef.current);
     return () => {
       clipboard.destroy();
