@@ -13,13 +13,13 @@ const Wrapper = styled.div`
 
 const Contents = styled.div`
   width: 75vw;
-  height: 20rem;
-  border-top: 0.3em solid
+  height: 22rem;
+  border-top: 0.2em solid
     ${(props) =>
       props.color === "red"
         ? props.theme.color.mainRed
         : props.theme.color.mainBlue};
-  border-bottom: 0.3em solid
+  border-bottom: 0.2em solid
     ${(props) =>
       props.color === "red"
         ? props.theme.color.mainRed
@@ -28,7 +28,7 @@ const Contents = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 2rem;
+  font-size: 1.6rem;
   font-family: Mont;
   span {
     color: ${(props) =>
