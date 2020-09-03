@@ -1,7 +1,7 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 import { useMediaQuery } from "react-responsive";
-import { Instagram } from "./Icons";
+import { Instagram, Twitter, Share } from "./Icons";
 import concertImg from "../Images/ambient.svg";
 
 const Wrapper = styled.div`
@@ -78,6 +78,9 @@ const SliderFooter = styled.div`
     display: flex;
     justify-content: center;
     margin-bottom: 1rem;
+    a:not(:last-child) {
+      margin-right: 0.5em;
+    }
     svg {
       width: 2.5rem;
       height: 2.5rem;
@@ -208,10 +211,19 @@ const Slider = ({
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href="https://www.instagram.com/alwaysfestival/"
+              href="https://www.instagram.com/always_fest/"
             >
               <Instagram />
             </a>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://twitter.com/always_fest"
+            >
+              <Twitter />
+            </a>
+
+            <Share />
           </div>
           {isEnoughHeight && (
             <div className="copyright">
