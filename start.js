@@ -80,9 +80,30 @@ cron.schedule("0 0 * * *", fetchLineup);
 cron.schedule("10 8 * * *", checkDB);
 
 // Functions
-function addScore(stage, score) {
+async function addScore(stage, score) {
   SCORE[stage]["sum"] += score;
   SCORE[stage]["count"] += 1;
+  try {
+    const latestLineup = await Lineups.find({})
+      .sort({ updated_at: -1 })
+      .limit(1);
+    await Lineups.updateOne(
+      { _id: latestLineup[0]._id },
+      {
+        $set: {
+          score: SCORE,
+        },
+      },
+      (err, res) => {
+        if (err) {
+          console.log(`update error on DB : ${err}`);
+          return;
+        }
+      }
+    );
+  } catch (e) {
+    console.log(`update error on Server : ${e}`);
+  }
 }
 
 function getScore(stage) {
@@ -209,6 +230,7 @@ async function fetchLineup() {
 
     const LineupObj = new Lineups({
       lineup: newLineup,
+      score: { red: { count: 0, sum: 0 }, blue: { count: 0, sum: 0 } },
     });
     await LineupObj.save().catch((err) => {
       console.log(`Error: create new lineup with DB : ${err}`);
@@ -234,6 +256,8 @@ async function getLineups() {
         LINEUP.blue = lineupItem.artist;
       }
     });
+    SCORE.red = lineups[0].score.red;
+    SCORE.blue = lineups[0].score.blue;
   })
     .sort({ updated_at: -1 })
     .limit(1);
