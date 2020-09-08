@@ -211,13 +211,9 @@ export default withRouter(({ history, match }) => {
   const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
 
   useEffect(() => {
-    const t = setTimeout(() => {
+    if (whereAmI === "stage") {
       setShowRateButton(true);
-    }, 90000);
-    return () => {
-      setShowRateButton(false);
-      clearTimeout(t);
-    };
+    }
   }, [whereAmI]);
 
   useEffect(() => {
