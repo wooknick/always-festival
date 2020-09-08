@@ -103,7 +103,7 @@ const Entrance = ({ stage, ratio, isPortrait, height, width }) => {
       const newRate = res.data["rate"];
       const newRateArr = [];
       for (let i = 0; i < 5; i++) {
-        if (newRate - i > 1) {
+        if (newRate - i >= 1) {
           newRateArr.push(1);
         } else if (newRate - i > 0) {
           newRateArr.push(0);

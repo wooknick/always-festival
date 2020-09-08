@@ -222,7 +222,7 @@ const RatePopup = ({ color, setShowRatePopup, stage, setCookie }) => {
           </Beers>
         ) : (
           <Thanks color={color}>
-            <span>Thank you for you feedback</span>
+            <span>Thank you for your feedback:)</span>
           </Thanks>
         )}
         {beforeSubmit ? (
