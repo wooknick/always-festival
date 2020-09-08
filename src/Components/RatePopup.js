@@ -159,7 +159,7 @@ const RatePopup = ({ color, setShowRatePopup, stage, setCookie }) => {
         }}
       >
         <Title color={color}>
-          <span>Enjoy this stage?</span>
+          <span>Enjoying this stage?</span>
         </Title>
         {beforeSubmit ? (
           <Beers color={color}>
