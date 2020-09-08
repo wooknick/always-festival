@@ -13,6 +13,7 @@ const util = require("util");
 
 // const variables
 const LINEUP = { red: [], blue: [] };
+const SCORE = { red: { count: 0, sum: 0 }, blue: { count: 0, sum: 0 } };
 
 // DB Connection
 const db = mongoose.connection;
@@ -51,6 +52,17 @@ app.get("/api/artists/:stage", (req, res) => {
   const stage = req.params.stage;
   res.json(LINEUP[stage]);
 });
+app.get("/api/rate/:stage", (req, res) => {
+  const stage = req.params.stage;
+  res.json({ rate: getScore(stage) });
+});
+
+app.put("/api/score/:stage", (req, res) => {
+  const stage = req.params.stage;
+  const { value } = req.query;
+  addScore(stage, Number(value));
+  res.json({ result: "ok" });
+});
 app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
@@ -68,6 +80,20 @@ cron.schedule("0 0 * * *", fetchLineup);
 cron.schedule("10 8 * * *", checkDB);
 
 // Functions
+function addScore(stage, score) {
+  SCORE[stage]["sum"] += score;
+  SCORE[stage]["count"] += 1;
+}
+
+function getScore(stage) {
+  if (SCORE[stage]["count"] === 0) {
+    return 2.5;
+  } else {
+    const rate = (SCORE[stage]["sum"] / SCORE[stage]["count"]).toFixed(1);
+    return rate;
+  }
+}
+
 async function testVideoId(videoIds) {
   try {
     const service = google.youtube("v3");

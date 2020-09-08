@@ -34,8 +34,20 @@ const Home = () => {
 
   return (
     <Wrapper height={windowHeight} width={windowWidth} isPortrait={isPortrait}>
-      <Entrance stage="red" ratio={50} isPortrait={isPortrait} />
-      <Entrance stage="blue" ratio={50} isPortrait={isPortrait} />
+      <Entrance
+        stage="red"
+        ratio={50}
+        isPortrait={isPortrait}
+        height={windowHeight}
+        width={windowWidth}
+      />
+      <Entrance
+        stage="blue"
+        ratio={50}
+        isPortrait={isPortrait}
+        height={windowHeight}
+        width={windowWidth}
+      />
     </Wrapper>
   );
 };
