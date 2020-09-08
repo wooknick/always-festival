@@ -157,10 +157,11 @@ const DropdownItem = styled.div`
 `;
 
 export default withRouter(({ history, match }) => {
-  const [isPlaying, setIsPlaying] = useState();
+  const [isPlaying, setIsPlaying] = useState(true);
   const [crowdVolume, setCrowdVolume] = useState(0.5);
   const [play, { stop }] = useSound(crowdSound, {
     volume: crowdVolume,
+    interrupt: true,
     loop: true,
   });
 
@@ -175,17 +176,25 @@ export default withRouter(({ history, match }) => {
   const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
 
   useEffect(() => {
-    if (stage !== "info") {
-      setIsPlaying(true);
-      play();
-    } else {
+    if (whereAmI === "info" || whereAmI === "contact") {
       setIsPlaying(false);
-      stop();
     }
-    return () => {
-      stop();
-    };
-  }, [color, match.isExact, play, stage, stop]);
+  }, [whereAmI]);
+
+  useEffect(() => {
+    if (isPlaying) {
+      (() => {
+        play();
+        console.log("play" + new Date().getSeconds());
+      })();
+    } else {
+      (() => {
+        stop();
+        console.log("stop" + new Date().getSeconds());
+      })();
+      // stop();
+    }
+  }, [isPlaying, play, stop]);
 
   useEffect(() => {
     const locationInfo = history.location.pathname.split("/");
