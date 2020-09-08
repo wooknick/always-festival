@@ -183,16 +183,9 @@ export default withRouter(({ history, match }) => {
 
   useEffect(() => {
     if (isPlaying) {
-      (() => {
-        play();
-        console.log("play" + new Date().getSeconds());
-      })();
+      play();
     } else {
-      (() => {
-        stop();
-        console.log("stop" + new Date().getSeconds());
-      })();
-      // stop();
+      stop();
     }
   }, [isPlaying, play, stop]);
 
