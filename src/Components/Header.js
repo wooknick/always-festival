@@ -3,10 +3,14 @@ import styled from "styled-components";
 import { withRouter } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
-import Slider from "./Slider";
 import useSound from "use-sound";
+import { useCookies } from "react-cookie";
+
+import Slider from "./Slider";
+import RatePopup from "./RatePopup";
 import crowdSound from "../Sounds/5min_fadeinout.wav";
 import ColorContext from "./ColorContext";
+import { FullBeer, EmptyBeer } from "./Icons";
 
 const Header = styled.header`
   width: 100%;
@@ -82,11 +86,19 @@ const Logo = styled.div`
   }
 `;
 
-const Dropdown = styled.div`
+const ExtraMenu = styled.div`
   font-size: 1.6rem;
   width: 100%;
   height: 100%;
   flex: 0.4;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+`;
+
+const Dropdown = styled.div`
+  font-size: 1.6rem;
+  height: 100%;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -156,16 +168,40 @@ const DropdownItem = styled.div`
   }
 `;
 
+const RateButton = styled.div`
+  width: 3.5rem;
+  height: 100%;
+  background-color: ${(props) =>
+    props.color === "red"
+      ? props.theme.color.mainRed
+      : props.theme.color.mainBlue};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 1px;
+  svg {
+    fill: white;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
 export default withRouter(({ history, match }) => {
-  const [isPlaying, setIsPlaying] = useState();
+  const [isPlaying, setIsPlaying] = useState(true);
   const [crowdVolume, setCrowdVolume] = useState(0.5);
   const [play, { stop }] = useSound(crowdSound, {
     volume: crowdVolume,
+    interrupt: true,
     loop: true,
   });
 
   const [isSliderOpen, setIsSliderOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const [cookies, setCookie] = useCookies();
+  const [showRateButton, setShowRateButton] = useState(false);
+  const [showRatePopup, setShowRatePopup] = useState(false);
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -175,17 +211,24 @@ export default withRouter(({ history, match }) => {
   const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
 
   useEffect(() => {
-    if (stage !== "info") {
-      setIsPlaying(true);
+    if (whereAmI === "stage") {
+      setShowRateButton(true);
+    }
+  }, [whereAmI]);
+
+  useEffect(() => {
+    if (whereAmI === "info" || whereAmI === "contact") {
+      setIsPlaying(false);
+    }
+  }, [whereAmI]);
+
+  useEffect(() => {
+    if (isPlaying) {
       play();
     } else {
-      setIsPlaying(false);
       stop();
     }
-    return () => {
-      stop();
-    };
-  }, [color, match.isExact, play, stage, stop]);
+  }, [isPlaying, play, stop]);
 
   useEffect(() => {
     const locationInfo = history.location.pathname.split("/");
@@ -269,16 +312,30 @@ export default withRouter(({ history, match }) => {
               {whereAmI === "stage" && <span>stage</span>}
             </div>
           </Menu>
-          {whereAmI === "stage" && !loading && !isPortrait && (
-            <Dropdown color={color}>
-              <div
-                onClick={() => {
-                  setIsDropdownOpen((v) => !v);
-                }}
-              >
-                lineup
-              </div>
-            </Dropdown>
+          {whereAmI === "stage" && (
+            <ExtraMenu>
+              {!loading && !isPortrait && (
+                <Dropdown color={color}>
+                  <div
+                    onClick={() => {
+                      setIsDropdownOpen((v) => !v);
+                    }}
+                  >
+                    lineup
+                  </div>
+                </Dropdown>
+              )}
+              {showRateButton && !cookies[`submitScore${stage}`] && (
+                <RateButton
+                  color={color}
+                  onClick={() => {
+                    setShowRatePopup(true);
+                  }}
+                >
+                  <FullBeer />
+                </RateButton>
+              )}
+            </ExtraMenu>
           )}
         </Header>
       )}
@@ -307,6 +364,14 @@ export default withRouter(({ history, match }) => {
           toggleCrowd={toggleCrowd}
           crowdVolume={crowdVolume}
           setCrowdVolume={setCrowdVolume}
+        />
+      )}
+      {showRatePopup && (
+        <RatePopup
+          color={color}
+          setShowRatePopup={setShowRatePopup}
+          stage={stage}
+          setCookie={setCookie}
         />
       )}
     </>

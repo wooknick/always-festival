@@ -26,6 +26,16 @@ const lineupSchema = new Schema(
         ],
       },
     ],
+    score: {
+      red: {
+        sum: Number,
+        count: Number,
+      },
+      blue: {
+        sum: Number,
+        count: Number,
+      },
+    },
   },
   {
     collection: "lineups",

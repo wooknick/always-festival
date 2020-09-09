@@ -13,6 +13,7 @@ const util = require("util");
 
 // const variables
 const LINEUP = { red: [], blue: [] };
+const SCORE = { red: { count: 0, sum: 0 }, blue: { count: 0, sum: 0 } };
 
 // DB Connection
 const db = mongoose.connection;
@@ -51,6 +52,17 @@ app.get("/api/artists/:stage", (req, res) => {
   const stage = req.params.stage;
   res.json(LINEUP[stage]);
 });
+app.get("/api/rate/:stage", (req, res) => {
+  const stage = req.params.stage;
+  res.json({ rate: getScore(stage) });
+});
+
+app.put("/api/score/:stage", (req, res) => {
+  const stage = req.params.stage;
+  const { value } = req.query;
+  addScore(stage, Number(value));
+  res.json({ result: "ok" });
+});
 app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
@@ -58,7 +70,7 @@ app.listen(process.env.PORT);
 console.log(`server start on http://localhost:${process.env.PORT}`);
 
 // Init
-// fetchLineup();
+// setInterval(fetchLineup, 2000);
 // checkDB();
 getLineups();
 // testVideoId(["PlE_xUktHz0", "p5NV4Y8Nl4A", "ttt", "j2gye27OAbA"]);
@@ -68,6 +80,41 @@ cron.schedule("0 0 * * *", fetchLineup);
 cron.schedule("10 8 * * *", checkDB);
 
 // Functions
+async function addScore(stage, score) {
+  SCORE[stage]["sum"] += score;
+  SCORE[stage]["count"] += 1;
+  try {
+    const latestLineup = await Lineups.find({})
+      .sort({ updated_at: -1 })
+      .limit(1);
+    await Lineups.updateOne(
+      { _id: latestLineup[0]._id },
+      {
+        $set: {
+          score: SCORE,
+        },
+      },
+      (err, res) => {
+        if (err) {
+          console.log(`update error on DB : ${err}`);
+          return;
+        }
+      }
+    );
+  } catch (e) {
+    console.log(`update error on Server : ${e}`);
+  }
+}
+
+function getScore(stage) {
+  if (SCORE[stage]["count"] === 0) {
+    return 2.5;
+  } else {
+    const rate = (SCORE[stage]["sum"] / SCORE[stage]["count"]).toFixed(1);
+    return rate;
+  }
+}
+
 async function testVideoId(videoIds) {
   try {
     const service = google.youtube("v3");
@@ -168,38 +215,38 @@ async function fetchLineup() {
     { stage: "red", artist: [] },
     { stage: "blue", artist: [] },
   ];
-  await Artists.find({ stage: "red" }, (err, artists) => {
-    if (err) {
-      console.log(err);
-    }
-    if (!artists) {
-      console.log("no artist");
-    }
-    const red = artists.sort(() => Math.random() - Math.random()).slice(0, 6);
+  try {
+    const redResult = await Artists.find({ stage: "red" }).exec();
+    const red = redResult.sort(() => Math.random() - Math.random()).slice(0, 6);
     newLineup[0].artist = red;
     console.log(`red: ${red.map((i) => i.artist).join(", ")}`);
-  });
-  await Artists.find({ stage: "blue" }, (err, artists) => {
-    if (err) {
-      console.log(err);
-    }
-    if (!artists) {
-      console.log("no artist");
-    }
-    const blue = artists.sort(() => Math.random() - Math.random()).slice(0, 6);
+
+    const blueResult = await Artists.find({ stage: "blue" }).exec();
+    const blue = blueResult
+      .sort(() => Math.random() - Math.random())
+      .slice(0, 6);
     newLineup[1].artist = blue;
     console.log(`blue: ${blue.map((i) => i.artist).join(", ")}`);
-  });
-  try {
+
     const LineupObj = new Lineups({
       lineup: newLineup,
+      score: {
+        red: {
+          count: Math.floor(Math.random() * 2 + 4),
+          sum: Math.floor(Math.random() * 3 + 13),
+        },
+        blue: {
+          count: Math.floor(Math.random() * 2 + 4),
+          sum: Math.floor(Math.random() * 3 + 13),
+        },
+      },
     });
     await LineupObj.save().catch((err) => {
       console.log(`Error: create new lineup with DB : ${err}`);
     });
     getLineups();
   } catch (e) {
-    console.log(`Error: create new lineup with Server : ${e}`);
+    console.log(e);
   }
 }
 
@@ -218,6 +265,8 @@ async function getLineups() {
         LINEUP.blue = lineupItem.artist;
       }
     });
+    SCORE.red = lineups[0].score.red;
+    SCORE.blue = lineups[0].score.blue;
   })
     .sort({ updated_at: -1 })
     .limit(1);
