@@ -230,7 +230,16 @@ async function fetchLineup() {
 
     const LineupObj = new Lineups({
       lineup: newLineup,
-      score: { red: { count: 0, sum: 0 }, blue: { count: 0, sum: 0 } },
+      score: {
+        red: {
+          count: Math.floor(Math.random() * 2 + 4),
+          sum: Math.floor(Math.random() * 3 + 13),
+        },
+        blue: {
+          count: Math.floor(Math.random() * 2 + 4),
+          sum: Math.floor(Math.random() * 3 + 13),
+        },
+      },
     });
     await LineupObj.save().catch((err) => {
       console.log(`Error: create new lineup with DB : ${err}`);
