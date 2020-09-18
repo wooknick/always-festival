@@ -140,8 +140,8 @@ const Slider = ({
   setIsSliderOpen,
   isPlaying,
   toggleCrowd,
-  crowdVolume,
-  setCrowdVolume,
+  volumeValue,
+  setVolumeValue,
 }) => {
   const isEnoughHeight = useMediaQuery({ query: "(min-height: 550px)" });
   const shareRef = useRef();
@@ -210,14 +210,13 @@ const Slider = ({
         <SliderItem>
           <CrowdVolume
             onChange={(e) => {
-              console.log(e.target.value);
-              setCrowdVolume(Number(e.target.value));
+              setVolumeValue(Number(e.target.value));
             }}
             type="range"
             step="0.01"
             min="0"
             max="1"
-            value={crowdVolume}
+            value={volumeValue}
           />
           <Crowd onClick={toggleCrowd}>
             <img src={concertImg} alt="concertImg" />
