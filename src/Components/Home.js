@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import Entrance from "./Entrance";
 
@@ -15,16 +15,20 @@ const Wrapper = styled.div`
 const Home = () => {
   // const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [windowWidth, setWindowWidth] = useState(window.outerWidth);
   const [isPortrait, setIsPortrait] = useState(
     window.innerHeight > window.innerWidth
   );
+  const t = useRef();
 
   useEffect(() => {
     const handleResize = () => {
-      setWindowHeight(window.innerHeight);
-      setWindowWidth(window.innerWidth);
-      setIsPortrait(window.innerHeight > window.innerWidth);
+      clearTimeout(t.current);
+      t.current = setTimeout(() => {
+        setWindowHeight(window.innerHeight);
+        setWindowWidth(window.outerWidth);
+        setIsPortrait(window.innerHeight > window.innerWidth);
+      }, 200);
     };
     window.addEventListener("resize", handleResize);
     return () => {

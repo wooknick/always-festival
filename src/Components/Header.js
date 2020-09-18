@@ -190,6 +190,8 @@ const RateButton = styled.div`
 export default withRouter(({ history, match }) => {
   const [isPlaying, setIsPlaying] = useState(true);
   const [crowdVolume, setCrowdVolume] = useState(0.5);
+  const [volumeValue, setVolumeValue] = useState(0.5);
+  const [muteValue, setMuteValue] = useState(1);
   const [play, { stop }] = useSound(crowdSound, {
     volume: crowdVolume,
     interrupt: true,
@@ -217,8 +219,14 @@ export default withRouter(({ history, match }) => {
   }, [whereAmI]);
 
   useEffect(() => {
+    setCrowdVolume(muteValue * volumeValue);
+  }, [muteValue, volumeValue]);
+
+  useEffect(() => {
     if (whereAmI === "info" || whereAmI === "contact") {
-      setIsPlaying(false);
+      setMuteValue(0);
+    } else {
+      setMuteValue(1);
     }
   }, [whereAmI]);
 
@@ -362,8 +370,8 @@ export default withRouter(({ history, match }) => {
           setIsSliderOpen={setIsSliderOpen}
           isPlaying={isPlaying}
           toggleCrowd={toggleCrowd}
-          crowdVolume={crowdVolume}
-          setCrowdVolume={setCrowdVolume}
+          volumeValue={volumeValue}
+          setVolumeValue={setVolumeValue}
         />
       )}
       {showRatePopup && (
