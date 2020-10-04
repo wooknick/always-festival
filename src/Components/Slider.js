@@ -130,7 +130,7 @@ const Crowd = styled.div`
 `;
 
 const CrowdVolume = styled.input`
-  margin-right: 1em;
+  margin-left: 1em;
 `;
 
 const Slider = ({
@@ -208,6 +208,10 @@ const Slider = ({
           Contact Us
         </SliderItem>
         <SliderItem>
+          <Crowd onClick={toggleCrowd}>
+            <img src={concertImg} alt="concertImg" />
+            {!isPlaying && <div className="forbidden"></div>}
+          </Crowd>
           <CrowdVolume
             onChange={(e) => {
               setVolumeValue(Number(e.target.value));
@@ -218,10 +222,6 @@ const Slider = ({
             max="1"
             value={volumeValue}
           />
-          <Crowd onClick={toggleCrowd}>
-            <img src={concertImg} alt="concertImg" />
-            {!isPlaying && <div className="forbidden"></div>}
-          </Crowd>
         </SliderItem>
         <SliderFooter>
           <div className="social">
