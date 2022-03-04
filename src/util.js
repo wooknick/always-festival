@@ -10,8 +10,7 @@ export const getAvailableVideo = async (videos) => {
         part: "id",
         id: video_ids.join(","),
         key:
-          process.env.REACT_APP_YOUTUBE_API_KEY ||
-          "AIzaSyDoTorqMsD8ldjOt14uNPt6dFqN3mtCL-g",
+          process.env.REACT_APP_YOUTUBE_API_KEY,
       },
     });
     // const ret = items.map((item) => item["id"]);
