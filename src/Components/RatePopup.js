@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import styled, { keyframes } from "styled-components";
-import axios from "axios";
-import { FullBeer, EmptyBeer } from "./Icons";
+import styled from "styled-components";
+import { FullBeer } from "./Icons";
 
 const Wrapper = styled.div`
   z-index: 10;
@@ -109,7 +108,6 @@ const Button = styled.div`
 
 const RatePopup = ({ color, setShowRatePopup, stage, setCookie }) => {
   const [beforeSubmit, setBeforSubmit] = useState(true);
-  const [score, setScore] = useState(1);
   const scoreRef = useRef();
   useEffect(() => {
     if (scoreRef.current) {
@@ -117,16 +115,7 @@ const RatePopup = ({ color, setShowRatePopup, stage, setCookie }) => {
     }
   }, []);
 
-  const handleScore = (e) => {
-    setScore(e.target.value);
-  };
-
   const handleSubmit = () => {
-    axios({
-      method: "put",
-      url: `/api/score/${stage}?value=${score}`,
-      responseType: "json",
-    });
     let today = new Date();
     let tomorrow = new Date(
       Date.UTC(
@@ -163,60 +152,55 @@ const RatePopup = ({ color, setShowRatePopup, stage, setCookie }) => {
         </Title>
         {beforeSubmit ? (
           <Beers color={color}>
-            <label for="score1" class="rating__label">
+            <label htmlFor="score1" className="rating__label">
               <FullBeer size={40} />
             </label>
             <input
               type="radio"
               id="score1"
               name="score"
-              class="rating__input"
-              onClick={handleScore}
+              className="rating__input"
               value={1}
               ref={scoreRef}
             />
-            <label for="score2" class="rating__label">
+            <label htmlFor="score2" className="rating__label">
               <FullBeer size={40} />
             </label>
             <input
               type="radio"
               id="score2"
               name="score"
-              class="rating__input"
-              onClick={handleScore}
+              className="rating__input"
               value={2}
             />
-            <label for="score3" class="rating__label">
+            <label htmlFor="score3" className="rating__label">
               <FullBeer size={40} />
             </label>
             <input
               type="radio"
               id="score3"
               name="score"
-              class="rating__input"
-              onClick={handleScore}
+              className="rating__input"
               value={3}
             />
-            <label for="score4" class="rating__label">
+            <label htmlFor="score4" className="rating__label">
               <FullBeer size={40} />
             </label>
             <input
               type="radio"
               id="score4"
               name="score"
-              class="rating__input"
-              onClick={handleScore}
+              className="rating__input"
               value={4}
             />
-            <label for="score5" class="rating__label">
+            <label htmlFor="score5" className="rating__label">
               <FullBeer size={40} />
             </label>
             <input
               type="radio"
               id="score5"
               name="score"
-              class="rating__input"
-              onClick={handleScore}
+              className="rating__input"
               value={5}
             />
           </Beers>

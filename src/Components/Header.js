@@ -11,6 +11,7 @@ import RatePopup from "./RatePopup";
 import crowdSound from "../Sounds/5min_fadeinout.wav";
 import ColorContext from "./ColorContext";
 import { FullBeer, EmptyBeer } from "./Icons";
+import LineupContext from "./LineupContext";
 
 const Header = styled.header`
   width: 100%;
@@ -210,6 +211,7 @@ export default withRouter(({ history, match }) => {
   const [whereAmI, setWhereAmI] = useState("");
   const [stage, setStage] = useState("");
   const { color, setColor } = useContext(ColorContext);
+  const { lineup } = useContext(LineupContext);
   const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
 
   useEffect(() => {
@@ -252,16 +254,15 @@ export default withRouter(({ history, match }) => {
   }, [history.location.pathname, match.isExact, setColor, whereAmI]);
 
   useEffect(() => {
-    setLoading(true);
-    axios({
-      method: "get",
-      url: `/api/artists/${stage}`,
-      responseType: "json",
-    }).then((res) => {
-      setData(res.data);
-      setLoading(false);
-    });
-  }, [stage]);
+    let newData;
+    if (stage === "red") {
+      newData = lineup["red"];
+    } else {
+      newData = lineup["blue"];
+    }
+    setData(newData);
+    setLoading(false);
+  }, [stage, lineup]);
 
   const toggleCrowd = () => {
     if (isPlaying) {

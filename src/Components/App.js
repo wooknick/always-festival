@@ -20,6 +20,9 @@ import ColorContext from "./ColorContext";
 import "./fonts/DiscoDiva/font.css";
 import "./fonts/Retrock/font.css";
 import "./fonts/Variete/font.css";
+import LineupContext from "./LineupContext";
+
+import { red, blue } from "../data";
 
 dotenv.config();
 
@@ -35,6 +38,15 @@ const App = () => {
   const [color, setColor] = useState(
     new Date().getSeconds() % 2 === 1 ? "red" : "blue"
   );
+
+  const [lineup, setLineup] = useState({ red: [], blue: [] });
+
+  useEffect(() => {
+    const redLineup = red.sort(() => Math.random() - 0.5).slice(0, 10);
+    const blueLineup = blue.sort(() => Math.random() - 0.5).slice(0, 10);
+
+    setLineup({ red: redLineup, blue: blueLineup });
+  }, []);
 
   useEffect(() => {
     if (isSmall) {
@@ -53,14 +65,16 @@ const App = () => {
         <Router>
           <>
             <ColorContext.Provider value={{ color, setColor }}>
-              <Header />
-              <Switch>
-                <Route exact path="/" component={Home} />
-                <Route path="/stage/:stage" component={Stage} />
-                <Route path="/info" component={Info} />
-                <Route path="/contact" component={Contact} />
-                <Redirect from="*" to="/" />
-              </Switch>
+              <LineupContext.Provider value={{ lineup }}>
+                <Header />
+                <Switch>
+                  <Route exact path="/" component={Home} />
+                  <Route path="/stage/:stage" component={Stage} />
+                  <Route path="/info" component={Info} />
+                  <Route path="/contact" component={Contact} />
+                  <Redirect from="*" to="/" />
+                </Switch>
+              </LineupContext.Provider>
             </ColorContext.Provider>
           </>
         </Router>

@@ -1,11 +1,12 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import styled, { keyframes, css } from "styled-components";
 import YouTube from "@u-wave/react-youtube"; // for youtube api
 import { useMediaQuery } from "react-responsive";
-import axios from "axios";
 import queryString from "query-string";
 import StageBlue from "../Images/StageBlue.png";
 import StageRed from "../Images/StageRed.png";
+import { red } from "../data";
+import LineupContext from "./LineupContext";
 
 const Wrapper = styled.div`
   padding-top: 3.5rem;
@@ -193,35 +194,33 @@ const Stage = ({ history, match, location }) => {
   const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
   const t = useRef();
 
+  const { lineup } = useContext(LineupContext);
+
   useEffect(() => {
-    setLoading(true);
-    axios({
-      method: "get",
-      url: `/api/artists/${stage}`,
-      responseType: "json",
-    }).then((res) => {
-      setData(res.data);
-      setOnStage(res.data[0]);
-      setLoading(false);
-    });
-  }, [stage]);
+    let newData;
+    if (stage === "red") {
+      newData = lineup["red"];
+    } else {
+      newData = lineup["blue"];
+    }
+    setData(newData);
+    setOnStage(newData[0]);
+    setLoading(false);
+  }, [stage, lineup]);
 
   useEffect(() => {
     if (query.index) {
-      const nextIndex = Number(query.index);
-      if (0 <= nextIndex && nextIndex < data.length) {
-        setOnStage(data[nextIndex]);
+      const nextIdx = Number(query.index);
+      if (0 <= nextIdx && nextIdx < data.length) {
+        setOnStage(data[nextIdx]);
       }
     }
   }, [data, query]);
 
   useEffect(() => {
     if (!loading) {
-      if (onStage.videos.length === 0) {
-        setVideos([{ id: "DoYvGBrPcjQ", comments: [""] }]); // should be never broken
-      } else {
-        setVideos(onStage.videos.sort(() => Math.random() - Math.random()));
-      }
+      // setVideos([{ id: "DoYvGBrPcjQ", comments: [""] }]); // should be never broken
+      setVideos([onStage]);
     }
   }, [loading, onStage]);
 
@@ -265,10 +264,8 @@ const Stage = ({ history, match, location }) => {
     };
   }, []);
 
-  const handleLineupClick = (id) => {
-    const nextArtist = data.find((i) => i._id === id);
-    history.push(`/stage/${stage}`);
-    setOnStage(nextArtist);
+  const handleLineupClick = (idx) => {
+    setOnStage(data[idx]);
   };
 
   return (
@@ -282,11 +279,11 @@ const Stage = ({ history, match, location }) => {
               width="100%"
               height="100%"
               video={videos[0] && videos[0].id}
-              playsInline={1}
+              playsInline={true}
             />
           </YoutubeWrapper>
           <Artist>
-            <div>{onStage.artist}</div>
+            <div>{onStage?.artist}</div>
           </Artist>
           <Comment width={marqueeValue[comIdx]}>
             <div
@@ -302,15 +299,15 @@ const Stage = ({ history, match, location }) => {
       {!loading && isPortrait && (
         <Lineup stage={stage} image={image} x={x} y={y}>
           <LineupWrapper stage={stage}>
-            {data.map((artist, idx) => (
+            {data.map(({ artist }, idx) => (
               <LineupItem
                 key={idx}
                 stage={stage}
                 onClick={() => {
-                  handleLineupClick(artist._id);
+                  handleLineupClick(idx);
                 }}
               >
-                {artist.artist}
+                {artist}
               </LineupItem>
             ))}
           </LineupWrapper>
