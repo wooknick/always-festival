@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
-import axios from "axios";
 import useSound from "use-sound";
 import { useCookies } from "react-cookie";
 
@@ -10,7 +9,7 @@ import Slider from "./Slider";
 import RatePopup from "./RatePopup";
 import crowdSound from "../Sounds/5min_fadeinout.wav";
 import ColorContext from "./ColorContext";
-import { FullBeer, EmptyBeer } from "./Icons";
+import { FullBeer } from "./Icons";
 import LineupContext from "./LineupContext";
 
 const Header = styled.header`
