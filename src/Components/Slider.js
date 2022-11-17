@@ -249,7 +249,7 @@ const Slider = ({
           </div>
           {isEnoughHeight && (
             <div className="copyright">
-              &copy; 2020. AlwaysFestival all rights reserved.
+              &copy; 2022. Weavers Lab all rights reserved.
             </div>
           )}
         </SliderFooter>
